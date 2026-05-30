@@ -62,6 +62,9 @@
   # extraEnv 는 env.nu 로 들어가며 config.nu(starship 통합)보다 먼저 로드된다.
   programs.nushell = {
     enable = true;
+    shellAliases = {
+      vim = "nvim";
+    };
     extraEnv = ''
       $env.PATH = (
         $env.PATH
