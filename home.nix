@@ -19,6 +19,18 @@
   # GitHub CLI
   programs.gh.enable = true;
 
+  # 기존 ~/.zshrc 의 PATH 한 줄을 선언적으로 대체한다.
+  home.sessionPath = [ "$HOME/.local/bin" ];
+
+  # zsh 를 home-manager 로 관리한다.
+  # 시스템 레벨 programs.zsh(darwin.nix)는 /etc/zshrc 를 다루고,
+  # 여기서는 사용자 ~/.zshrc 를 관리해 starship 통합 라인이 자동으로 들어가게 한다.
+  programs.zsh.enable = true;
+
+  # Starship 프롬프트. enableZshIntegration 이 기본 true 라서
+  # ~/.zshrc 끝에 `eval "$(starship init zsh)"` 가 자동 추가된다.
+  programs.starship.enable = true;
+
   # Ghostty 터미널.
   # 앱 바이너리(ghostty-bin)는 darwin.nix 의 systemPackages 가 설치하므로
   # 여기서는 package=null 로 두고 설정 파일(~/.config/ghostty/config)만 관리한다.

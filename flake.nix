@@ -27,6 +27,9 @@
         {
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          # 기존 ~/.zshrc 처럼 home-manager 가 관리하려는 파일이 이미 있으면
+          # 덮어쓰기 오류 대신 .backup 으로 백업하고 진행한다.
+          home-manager.backupFileExtension = "backup";
           home-manager.extraSpecialArgs = { inherit inputs; };
           home-manager.users.chanhee = import ./home.nix;
         }
