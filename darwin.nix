@@ -20,7 +20,7 @@
   # macOS 시스템 기본값
   system.defaults.NSGlobalDomain = {
     # 키보드 입력 반복 속도 개선
-    KeyRepeat = 1; # 반복 속도 (최소값 = 가장 빠름)
+    KeyRepeat = 2; # 반복 속도 (최소값 = 가장 빠름)
     InitialKeyRepeat = 10; # 반복 시작 전 지연 (최소값 = 가장 짧음)
     ApplePressAndHoldEnabled = false; # 길게 누르면 액센트 메뉴 대신 반복 입력
   };
