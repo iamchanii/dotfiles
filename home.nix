@@ -112,4 +112,20 @@
       window-save-state = "always";
     };
   };
+
+  # Zellij 터미널 멀티플렉서.
+  # home-manager 의 zellij 모듈은 bash/fish/zsh 자동 시작 통합만 제공하고
+  # nushell 통합은 없다. 우리 로그인 셸은 nushell 이므로 터미널을 열 때 zellij 가
+  # 자동으로 뜨지 않는다 (직접 실행할 때만 띄운다) — 의도한 동작이다.
+  programs.zellij = {
+    enable = true;
+    settings = {
+      # Ghostty 와 동일한 색 테마로 통일. catppuccin-mocha 는 zellij 내장 테마라
+      # 별도 테마 파일 정의가 필요 없다.
+      theme = "catppuccin-mocha";
+      # zellij 내부 pane 도 로그인 셸과 동일하게 nushell 을 쓰게 고정한다.
+      # 안정 경로(/run/current-system/sw/bin)를 써서 store 해시 변화에 영향받지 않게 한다.
+      default_shell = "/run/current-system/sw/bin/nu";
+    };
+  };
 }

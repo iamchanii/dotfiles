@@ -9,6 +9,7 @@ nix-darwin 과 home-manager 로 관리하는 macOS 설정.
 - **GitHub CLI** (`gh`) — `programs.gh.enable`
 - **Node.js** — `home.packages` (`pkgs.nodejs`)
 - **nushell** — 기본 로그인 셸 (`programs.nushell`, `users.users.chanhee.shell`). starship 통합은 `enableNushellIntegration` 으로 자동 구성. zsh 는 복구용 안전망으로만 남겨둠 (`/etc/zshrc`)
+- **Zellij** — 터미널 멀티플렉서 (`programs.zellij`). catppuccin-mocha 테마, 내부 pane 도 nushell 사용. nushell 자동 시작 통합은 없어 직접 실행할 때만 뜸
 - **키보드 반복 속도 튜닝** — `KeyRepeat=2`, `InitialKeyRepeat=10`, 길게 누르기 시 액센트 메뉴 대신 반복 입력
 
 ## 요구사항
