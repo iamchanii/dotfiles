@@ -8,7 +8,7 @@ nix-darwin 과 home-manager 로 관리하는 macOS 설정.
 - **NvChad** — Neovim IDE 구성 (nix4nvchad, `programs.nvchad.enable`)
 - **GitHub CLI** (`gh`) — `programs.gh.enable`
 - **Node.js** — `home.packages` (`pkgs.nodejs`)
-- **zsh** — 기본 셸
+- **nushell** — 기본 로그인 셸 (`programs.nushell`, `users.users.chanhee.shell`). starship 통합은 `enableNushellIntegration` 으로 자동 구성. zsh 는 복구용 안전망으로만 남겨둠 (`/etc/zshrc`)
 - **키보드 반복 속도 튜닝** — `KeyRepeat=2`, `InitialKeyRepeat=10`, 길게 누르기 시 액센트 메뉴 대신 반복 입력
 
 ## 요구사항
