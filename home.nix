@@ -22,7 +22,7 @@
     enable = true;
     package = null;
     settings = {
-      theme = "catppuccin-mocha";
+      theme = "Catppuccin Mocha";
       # CodexMono EA Nerd: 라틴+한글+일본어+중국어(간체) + Nerd Font 아이콘을
       # 단일 폰트로 커버하므로 폴백이 필요 없다.
       # (폰트 자체는 darwin.nix 의 fonts.packages 가 설치)
