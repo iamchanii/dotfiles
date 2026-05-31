@@ -6,6 +6,7 @@
     ./home/shell.nix
     ./home/terminals.nix
     ./home/editor.nix
+    ./home/karabiner.nix
   ];
 
   home.stateVersion = "25.11";
