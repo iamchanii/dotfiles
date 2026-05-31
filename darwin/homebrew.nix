@@ -21,6 +21,9 @@
       # Karabiner-Elements: macOS 키보드 커스터마이징. v15 부터 nix-darwin 모듈이
       # 동작하지 않아 cask 로 설치한다. 자세한 사정은 darwin/karabiner.nix 참고.
       "karabiner-elements"
+
+      # Google Chrome: 웹 브라우저.
+      "google-chrome"
     ];
   };
 }
