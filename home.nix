@@ -7,6 +7,7 @@
     ./home/shell.nix
     ./home/terminals.nix
     ./home/editor.nix
+    ./home/obsidian.nix
     ./home/karabiner.nix
     ./home/agent-skills.nix
   ];
