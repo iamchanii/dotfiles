@@ -7,6 +7,7 @@
     ./home/terminals.nix
     ./home/editor.nix
     ./home/karabiner.nix
+    ./home/amethyst.nix
   ];
 
   home.stateVersion = "25.11";
