@@ -24,6 +24,9 @@
 
       # Google Chrome: 웹 브라우저.
       "google-chrome"
+
+      # 1Password: 비밀번호 관리자.
+      "1password"
     ];
   };
 }
