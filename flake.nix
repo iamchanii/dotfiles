@@ -16,6 +16,15 @@
       url = "github:nix-community/nix4nvchad";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # 에이전트 스킬(SKILL.md 디렉터리)을 선언적으로 관리한다.
+    agent-skills.url = "github:Kyure-A/agent-skills-nix";
+
+    # 스킬 소스: flake 가 아니므로 flake = false 로 소스 트리만 가져온다.
+    obsidian-skills = {
+      url = "github:kepano/obsidian-skills";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nix-darwin, home-manager, determinate, ... }@inputs: {
