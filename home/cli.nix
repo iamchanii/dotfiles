@@ -12,7 +12,7 @@
   programs.git = {
     enable = true;
     # git merge 자체를 squash 기본값으로 바꾸는 config 는 없으므로 alias 로 제공
-    aliases = {
+    settings.alias = {
       sm = "merge --squash";
     };
   };
