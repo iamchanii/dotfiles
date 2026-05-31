@@ -13,6 +13,7 @@
     enable = true;
     shellAliases = {
       vim = "nvim";
+      z = "zellij";
     };
     extraEnv = ''
       $env.PATH = (
