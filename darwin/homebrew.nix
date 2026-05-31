@@ -27,6 +27,9 @@
 
       # 1Password: 비밀번호 관리자.
       "1password"
+
+      # Obsidian: 마크다운 기반 노트 앱.
+      "obsidian"
     ];
   };
 }
