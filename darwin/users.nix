@@ -1,14 +1,14 @@
-{ pkgs, ... }:
+{ pkgs, user, ... }:
 {
   # 사용자 옵션 적용을 위한 primary user 지정 (최신 nix-darwin 요구사항)
-  system.primaryUser = "chanhee";
+  system.primaryUser = user;
 
   # 기존 사용자의 로그인 셸을 선언적으로 바꾸려면 nix-darwin 이 해당 사용자를
   # "관리 대상"으로 알아야 한다. knownUsers 에 넣으면 uid/shell 등을 적용한다.
-  users.knownUsers = [ "chanhee" ];
-  users.users.chanhee = {
-    name = "chanhee";
-    home = "/Users/chanhee";
+  users.knownUsers = [ user ];
+  users.users.${user} = {
+    name = user;
+    home = "/Users/${user}";
     uid = 501; # 기존 계정 uid (id -u 로 확인). knownUsers 에 필요.
     shell = pkgs.nushell; # 로그인 셸을 nushell 로 변경
   };

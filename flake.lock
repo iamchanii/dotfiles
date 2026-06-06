@@ -19,6 +19,22 @@
         "type": "github"
       }
     },
+    "anthropics-skills": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1780020146,
+        "narHash": "sha256-BiZvEV7VK1AwhiGg+pNMgTUQmt4exevLWwL0Brx4YyE=",
+        "owner": "anthropics",
+        "repo": "skills",
+        "rev": "da20c92503b2e8ff1cf28ca81a0df4673debdbf7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "anthropics",
+        "repo": "skills",
+        "type": "github"
+      }
+    },
     "determinate": {
       "inputs": {
         "determinate-nixd-aarch64-darwin": "determinate-nixd-aarch64-darwin",
@@ -392,6 +408,7 @@
     "root": {
       "inputs": {
         "agent-skills": "agent-skills",
+        "anthropics-skills": "anthropics-skills",
         "determinate": "determinate",
         "home-manager": "home-manager_2",
         "nix-darwin": "nix-darwin",
