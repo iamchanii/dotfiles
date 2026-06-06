@@ -25,6 +25,11 @@
       url = "github:kepano/obsidian-skills";
       flake = false;
     };
+
+    anthropics-skills = {
+      url = "github:anthropics/skills";
+      flake = false;
+    };
   };
 
   outputs = { self, nixpkgs, nix-darwin, home-manager, determinate, ... }@inputs: {

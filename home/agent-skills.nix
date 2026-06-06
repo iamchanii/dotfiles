@@ -11,13 +11,19 @@
       subdir = "skills";
     };
 
-    # kepano/obsidian-skills 가 제공하는 스킬 목록.
+    sources.anthropics = {
+      input = "anthropics-skills";
+      subdir = "skills";
+    };
+
+    # kepano/obsidian-skills 및 anthropics/skills 가 제공하는 스킬 목록.
     skills.enable = [
       "defuddle"
       "json-canvas"
       "obsidian-bases"
       "obsidian-cli"
       "obsidian-markdown"
+      "skill-creator"
     ];
 
     # ~/.claude/skills 로 동기화한다.
