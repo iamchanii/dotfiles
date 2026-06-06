@@ -16,13 +16,11 @@
       subdir = "skills";
     };
 
-    # kepano/obsidian-skills 및 anthropics/skills 가 제공하는 스킬 목록.
+    # obsidian 소스(kepano/obsidian-skills)는 전체 활성화한다.
+    skills.enableAll = [ "obsidian" ];
+
+    # anthropics/skills 에서 추가로 활성화할 스킬.
     skills.enable = [
-      "defuddle"
-      "json-canvas"
-      "obsidian-bases"
-      "obsidian-cli"
-      "obsidian-markdown"
       "skill-creator"
     ];
 
