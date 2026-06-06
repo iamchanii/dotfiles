@@ -1,5 +1,5 @@
 FLAKE := .
-HOST  := Chanhees-MacBook-Pro
+HOST  := $(shell hostname -s)
 
 .PHONY: switch build check update
 
@@ -9,10 +9,8 @@ HOST  := Chanhees-MacBook-Pro
 #   모든 상황에서 안정적으로 동작한다.
 switch:
 	@OUT="$$(nix build --no-link --print-out-paths $(FLAKE)#darwinConfigurations.$(HOST).system)"; \
-	echo ">> $$OUT/activate-user"; \
-	"$$OUT/activate-user"; \
-	echo ">> sudo $$OUT/activate"; \
-	sudo "$$OUT/activate"
+	echo ">> sudo $$OUT/sw/bin/darwin-rebuild activate"; \
+	sudo "$$OUT/sw/bin/darwin-rebuild" activate
 
 # 적용하지 않고 빌드만 해서 평가/빌드 오류를 확인한다.
 build:
