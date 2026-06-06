@@ -13,11 +13,12 @@
       # 안정 경로(/run/current-system/sw/bin)를 써서 store 해시 변화에 영향받지 않게 한다.
       command = "/run/current-system/sw/bin/nu";
       theme = "Catppuccin Mocha";
-      # CodexMono EA Nerd: 라틴+한글+일본어+중국어(간체) + Nerd Font 아이콘을
-      # 단일 폰트로 커버하므로 폴백이 필요 없다.
-      # (폰트 자체는 darwin/fonts.nix 의 fonts.packages 가 설치)
-      font-family = "CodexMono EA Nerd";
-      # CodexMono 는 합자(ligature)를 지원하지 않으므로 명시적으로 끈다.
+      # 영문: JetBrains Mono, 한글 폴백: GalmuriMono11
+      # (두 폰트 모두 darwin/fonts.nix 의 fonts.packages 가 설치)
+      font-family = [
+        "JetBrains Mono"
+        "GalmuriMono11"
+      ];
       font-feature = [ "-calt" "-liga" "-dlig" ];
       font-size = 14;
       background-opacity = 0.95;
