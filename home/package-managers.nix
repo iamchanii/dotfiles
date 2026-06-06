@@ -1,4 +1,4 @@
-{ ... }:
+{ config, ... }:
 {
   # 패키지 매니저 쿨다운(최소 릴리스 경과 시간) = 1일.
   # 갓 게시돼 아직 검증되지 않은 버전의 설치를 하루 지연시켜, npm 공급망 공격
@@ -10,8 +10,11 @@
 
   # npm (>=11.10): min-release-age. 단위는 "일"이고 값은 정수만 허용
   # (`1d`/`24h` 같은 문자열은 거부됨). 1일 = 1.
+  # prefix: nixpkg 로 설치된 node 는 store 가 읽기 전용이라 -g 설치가 실패하므로
+  # ~/.npm-global 을 전역 prefix 로 지정한다. (npm-global-pkgs.nix 에서 관리)
   home.file.".npmrc".text = ''
     min-release-age=1
+    prefix=${config.home.homeDirectory}/.npm-global
   '';
 
   # pnpm (>=11): minimumReleaseAge, 분 단위. pnpm 11 부터 이 설정은 .npmrc 가 아닌

@@ -10,6 +10,7 @@
     ./home/obsidian.nix
     ./home/karabiner.nix
     ./home/agent-skills.nix
+    ./home/npm-global-pkgs.nix
   ];
 
   home.stateVersion = "25.11";
