@@ -18,6 +18,11 @@
       extraFlags = [ "--force" ]; # brew bundle --cleanup 에 필요한 확인 플래그
     };
 
+    masApps = {
+      # KakaoTalk: 카카오 메신저.
+      "KakaoTalk" = 869223134;
+    };
+
     casks = [
       # Karabiner-Elements: macOS 키보드 커스터마이징. v15 부터 nix-darwin 모듈이
       # 동작하지 않아 cask 로 설치한다. 자세한 사정은 darwin/karabiner.nix 참고.
