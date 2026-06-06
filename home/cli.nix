@@ -13,6 +13,8 @@
     enable = true;
     settings.user.name = "Chanhee Lee";
     settings.user.email = "contact@imch.dev";
+    # git init 시 기본 브랜치를 main 으로 설정
+    settings.init.defaultBranch = "main";
     # git merge 자체를 squash 기본값으로 바꾸는 config 는 없으므로 alias 로 제공
     settings.alias = {
       sm = "merge --squash";
