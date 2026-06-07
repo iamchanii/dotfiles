@@ -11,6 +11,9 @@
   # extraEnv 는 env.nu 로 들어가며 config.nu(starship 통합)보다 먼저 로드된다.
   programs.nushell = {
     enable = true;
+    settings = {
+      show_banner = false; # 셸 시작 시 환영 배너 숨김
+    };
     shellAliases = {
       vim = "nvim";
       z = "zellij";
