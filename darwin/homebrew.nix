@@ -23,6 +23,26 @@
       "KakaoTalk" = 869223134;
     };
 
+    taps = [
+      # opencode formula 를 제공하는 서드파티 탭.
+      #
+      # Homebrew 6.0.0 부터 HOMEBREW_REQUIRE_TAP_TRUST 가 기본 활성화돼,
+      # 신뢰하지 않은 비공식 탭의 formula/cask 는 activation 중 로드를 거부한다.
+      # trusted=true 로 이 탭을 신뢰해 opencode 가 정상 설치되도록 한다.
+      {
+        name = "anomalyco/tap";
+        trusted = true;
+      }
+    ];
+
+    brews = [
+      # opencode: AI 코딩 에이전트 CLI.
+      # formula 의 trusted 기본값이 true 라 Brewfile 에 trusted: true 가 자동으로
+      # 찍히고, fully-qualified 이름이라 Homebrew 가 그 trust 를 실제로 적용한다.
+      # (plain 이름이면 trust 는 탭에서 와야 한다.) 그래서 별도 설정 불필요.
+      "anomalyco/tap/opencode"
+    ];
+
     casks = [
       # Karabiner-Elements: macOS 키보드 커스터마이징. v15 부터 nix-darwin 모듈이
       # 동작하지 않아 cask 로 설치한다. 자세한 사정은 darwin/karabiner.nix 참고.
