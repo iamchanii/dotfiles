@@ -23,6 +23,16 @@
       "KakaoTalk" = 869223134;
     };
 
+    taps = [
+      # opencode formula 를 제공하는 서드파티 탭.
+      "anomalyco/tap"
+    ];
+
+    brews = [
+      # opencode: AI 코딩 에이전트 CLI.
+      "anomalyco/tap/opencode"
+    ];
+
     casks = [
       # Karabiner-Elements: macOS 키보드 커스터마이징. v15 부터 nix-darwin 모듈이
       # 동작하지 않아 cask 로 설치한다. 자세한 사정은 darwin/karabiner.nix 참고.
