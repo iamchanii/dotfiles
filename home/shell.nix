@@ -19,6 +19,13 @@
       z = "zellij";
     };
     extraEnv = ''
+      # Homebrew 환경 변수. zsh/bash 는 `brew shellenv`(/etc/zprofile 등)로
+      # 이 값들을 받지만 nushell 은 그 스니펫을 읽지 않으므로 직접 설정한다.
+      # Apple Silicon 의 prefix 는 /opt/homebrew 고정. (Intel 이면 /usr/local)
+      $env.HOMEBREW_PREFIX = "/opt/homebrew"
+      $env.HOMEBREW_CELLAR = "/opt/homebrew/Cellar"
+      $env.HOMEBREW_REPOSITORY = "/opt/homebrew"
+
       $env.PATH = (
         $env.PATH
         | (if ($in | describe) == "string" { split row (char esep) } else { $in })
@@ -26,6 +33,8 @@
             "${config.home.profileDirectory}/bin" # home-manager 패키지 (starship 등)
             "/run/current-system/sw/bin"           # nix-darwin 시스템 패키지 (darwin-rebuild 등)
             "/nix/var/nix/profiles/default/bin"     # Determinate Nix (nix)
+            "/opt/homebrew/bin"                     # Homebrew 패키지 (nix 보다 뒤 우선순위)
+            "/opt/homebrew/sbin"
             "${config.home.homeDirectory}/.local/bin"
         ]
         | uniq
