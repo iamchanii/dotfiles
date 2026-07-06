@@ -14,7 +14,6 @@
     onActivation = {
       autoUpdate = true; # rebuild 마다 brew formulae 목록 갱신
       upgrade = true; # 선언된 cask 를 최신으로 업그레이드
-      cleanup = "zap"; # 선언되지 않은 cask/formula 제거
       extraFlags = [ "--force" ]; # brew bundle --cleanup 에 필요한 확인 플래그
     };
 
