@@ -66,7 +66,7 @@
             # 덮어쓰기 오류 대신 .backup 으로 백업하고 진행한다.
             home-manager.backupFileExtension = "backup";
             home-manager.extraSpecialArgs = { inherit inputs user; };
-            home-manager.users.${user} = import ./home.nix;
+            home-manager.users.${user} = import ./darwin/home/default.nix;
           }
         ];
       };

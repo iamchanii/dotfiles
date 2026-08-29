@@ -75,12 +75,12 @@ nixpkgs의 `aarch64-linux` Chromium을 사용한다. Mac의 Homebrew Chrome 구�
 - **nushell** — 기본 로그인 셸 (`programs.nushell`, `users.users.chanhee.shell`). starship 통합은 `enableNushellIntegration` 으로 자동 구성. zsh 는 복구용 안전망으로만 남겨둠 (`/etc/zshrc`)
 - **Zellij** — 터미널 멀티플렉서 (`programs.zellij`). catppuccin-mocha 테마, 내부 pane 도 nushell 사용. nushell 자동 시작 통합은 없어 직접 실행할 때만 뜸
 - **키보드 반복 속도 튜닝** — `KeyRepeat=2`, `InitialKeyRepeat=10`, 길게 누르기 시 액센트 메뉴 대신 반복 입력
-- **Homebrew cask** — brew 로 설치하는 cask 는 모두 `darwin/homebrew.nix` 의 `casks` 에 선언한다 (`cleanup="zap"` 로 미선언 항목은 제거). brew 바이너리 자체는 nix 가 설치하지 않으므로 선행 설치돼 있어야 한다 (아래 설치 절차 참고). 현재 cask: `karabiner-elements`, `google-chrome`, `1password`, `obsidian`
-- **Karabiner-Elements** — 키보드 커스터마이징. nix-darwin 모듈은 Karabiner v15 와 호환되지 않아 Homebrew cask 로 설치 (`darwin/karabiner.nix` 는 사정·수동 승인만 문서화). 키맵은 `home/karabiner.nix` 가 `karabiner.json` 을 선언적으로 생성한다:
+- **Homebrew cask** — brew 로 설치하는 cask 는 모두 `darwin/system/homebrew.nix` 의 `casks` 에 선언한다 (`cleanup="zap"` 로 미선언 항목은 제거). brew 바이너리 자체는 nix 가 설치하지 않으므로 선행 설치돼 있어야 한다 (아래 설치 절차 참고). 현재 cask: `karabiner-elements`, `google-chrome`, `1password`, `obsidian`
+- **Karabiner-Elements** — 키보드 커스터마이징. nix-darwin 모듈은 Karabiner v15 와 호환되지 않아 Homebrew cask 로 설치 (`darwin/system/karabiner.nix` 는 사정·수동 승인만 문서화). 키맵은 `darwin/home/karabiner.nix` 가 `karabiner.json` 을 선언적으로 생성한다:
   - **Right Command → Hyper** (⌘⌃⌥⇧)
   - **Right Option → Meh** (⌃⌥⇧, Hyper 에서 ⌘ 제외)
 
-  `home.file` 로 만들어 `~/.config/karabiner/karabiner.json` 은 읽기 전용 심볼릭 링크다. 즉 **GUI 편집·저장은 불가**하며 키맵 변경은 `home/karabiner.nix` 의 `complex_modifications.rules` 에서 한다
+  `home.file` 로 만들어 `~/.config/karabiner/karabiner.json` 은 읽기 전용 심볼릭 링크다. 즉 **GUI 편집·저장은 불가**하며 키맵 변경은 `darwin/home/karabiner.nix` 의 `complex_modifications.rules` 에서 한다
 
 ## 요구사항
 

@@ -2,7 +2,7 @@
 {
   # nushell 을 home-manager 로 관리한다. macOS 에서는
   # ~/Library/Application Support/nushell/{env,config}.nu 가 선언적으로 생성된다.
-  # 로그인 셸 지정은 darwin/users.nix 에서 한다.
+  # 로그인 셸 지정은 darwin/system/users.nix 에서 한다.
   #
   # PATH 주의: zsh/bash 와 달리 nushell 은 Determinate Nix / nix-darwin 의 셸
   # 초기화 스니펫(/etc/zshrc 등)을 읽지 않고, home-manager 의 home.sessionPath

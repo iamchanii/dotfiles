@@ -1,7 +1,7 @@
 { inputs, lib, pkgs, ... }:
 {
   # Ghostty 터미널.
-  # 앱 바이너리(ghostty-bin)는 darwin/system.nix 의 systemPackages 가 설치하므로
+  # 앱 바이너리(ghostty-bin)는 darwin/system/core.nix 의 systemPackages가 설치하므로
   # 여기서는 package=null 로 두고 설정 파일(~/.config/ghostty/config)만 관리한다.
   programs.ghostty = {
     enable = true;
@@ -18,7 +18,7 @@
       command = "${pkgs.nushell}/bin/nu";
       theme = "Catppuccin Mocha";
       # 영문: JetBrains Mono, 한글 폴백: GalmuriMono11
-      # (두 폰트 모두 darwin/fonts.nix 의 fonts.packages 가 설치)
+      # (두 폰트 모두 darwin/system/fonts.nix 의 fonts.packages가 설치)
       font-family = if pkgs.stdenv.isLinux then "Jetendard" else [
         "JetBrains Mono"
         "GalmuriMono11"

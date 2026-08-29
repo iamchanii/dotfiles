@@ -1,15 +1,7 @@
-{ inputs, user, ... }:
+{ user, ... }:
 {
   imports = [
-    inputs.agent-skills.homeManagerModules.default
-    ./home/cli.nix
-    ./home/package-managers.nix
-    ./home/shell.nix
-    ./home/terminals.nix
-    ./home/editor.nix
-    ./home/agent-skills.nix
-    ./home/npm-global-pkgs.nix
-    ./home/linux.nix
+    ./linux/home/default.nix
   ];
 
   home = {
