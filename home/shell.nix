@@ -1,4 +1,4 @@
-{ config, ... }:
+{ config, lib, pkgs, ... }:
 {
   # nushell 을 home-manager 로 관리한다. macOS 에서는
   # ~/Library/Application Support/nushell/{env,config}.nu 가 선언적으로 생성된다.
@@ -16,9 +16,10 @@
     };
     shellAliases = {
       vim = "nvim";
+    } // lib.optionalAttrs pkgs.stdenv.isDarwin {
       z = "zellij";
     };
-    extraEnv = ''
+    extraEnv = lib.optionalString pkgs.stdenv.isDarwin ''
       # Homebrew 환경 변수. zsh/bash 는 `brew shellenv`(/etc/zprofile 등)로
       # 이 값들을 받지만 nushell 은 그 스니펫을 읽지 않으므로 직접 설정한다.
       # Apple Silicon 의 prefix 는 /opt/homebrew 고정. (Intel 이면 /usr/local)
@@ -35,6 +36,16 @@
             "/nix/var/nix/profiles/default/bin"     # Determinate Nix (nix)
             "/opt/homebrew/bin"                     # Homebrew 패키지 (nix 보다 뒤 우선순위)
             "/opt/homebrew/sbin"
+            "${config.home.homeDirectory}/.local/bin"
+        ]
+        | uniq
+      )
+    '' + lib.optionalString pkgs.stdenv.isLinux ''
+      $env.PATH = (
+        $env.PATH
+        | (if ($in | describe) == "string" { split row (char esep) } else { $in })
+        | prepend [
+            "${config.home.profileDirectory}/bin"
             "${config.home.homeDirectory}/.local/bin"
         ]
         | uniq

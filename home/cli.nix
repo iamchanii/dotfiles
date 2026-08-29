@@ -1,10 +1,10 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   # 사용자 패키지
-  home.packages = [
-    pkgs.nodejs # Node.js (현재 LTS)
-    pkgs.uv
-  ];
+  home.packages =
+    [ pkgs.nodejs ] # Node.js (현재 LTS)
+    # uv 는 기존 Mac 구성에만 유지한다.
+    ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.uv ];
 
   # home-manager 자기 자신을 관리
   programs.home-manager.enable = true;

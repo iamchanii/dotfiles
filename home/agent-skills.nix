@@ -24,7 +24,7 @@
       "skill-creator"
     ];
 
-    # ~/.claude/skills 로 동기화한다.
-    targets.claude.enable = true;
+    # Codex 의 기본 전역 스킬 디렉터리(~/.codex/skills)로 동기화한다.
+    targets.codex.enable = true;
   };
 }

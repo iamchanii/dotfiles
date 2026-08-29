@@ -1,29 +1,34 @@
-{ ... }:
+{ inputs, lib, pkgs, ... }:
 {
   # Ghostty 터미널.
   # 앱 바이너리(ghostty-bin)는 darwin/system.nix 의 systemPackages 가 설치하므로
   # 여기서는 package=null 로 두고 설정 파일(~/.config/ghostty/config)만 관리한다.
   programs.ghostty = {
     enable = true;
-    package = null;
+    package =
+      if pkgs.stdenv.isDarwin then
+        null
+      else
+        inputs.ghostty.packages.${pkgs.system}.default;
     settings = {
       # Ghostty 는 기본적으로 $SHELL 환경변수를 따르는데, macOS GUI 로그인 세션의
       # $SHELL 은 로그인 시점 값(/bin/zsh)으로 캐시돼 dscl 로 셸을 바꿔도 재로그인
       # 전까지 갱신되지 않는다. 그래서 셸을 nushell 로 명시해 즉시·확실하게 고정한다.
       # 안정 경로(/run/current-system/sw/bin)를 써서 store 해시 변화에 영향받지 않게 한다.
-      command = "/run/current-system/sw/bin/nu";
+      command = "${pkgs.nushell}/bin/nu";
       theme = "Catppuccin Mocha";
       # 영문: JetBrains Mono, 한글 폴백: GalmuriMono11
       # (두 폰트 모두 darwin/fonts.nix 의 fonts.packages 가 설치)
-      font-family = [
+      font-family = if pkgs.stdenv.isLinux then "Jetendard" else [
         "JetBrains Mono"
         "GalmuriMono11"
       ];
       font-feature = [ "-calt" "-liga" "-dlig" ];
-      font-size = 14;
-      background-opacity = 0.95;
+      font-size = if pkgs.stdenv.isLinux then 12 else 14;
+      # 기존 Mac 투명도는 유지하고 Fedora에서만 불투명 배경을 쓴다.
+      background-opacity = lib.mkIf pkgs.stdenv.isDarwin 0.95;
       cursor-style = "block";
-      macos-option-as-alt = true;
+      macos-option-as-alt = lib.mkIf pkgs.stdenv.isDarwin true;
       window-save-state = "always";
     };
   };
@@ -32,7 +37,7 @@
   # home-manager 의 zellij 모듈은 bash/fish/zsh 자동 시작 통합만 제공하고
   # nushell 통합은 없다. 우리 로그인 셸은 nushell 이므로 터미널을 열 때 zellij 가
   # 자동으로 뜨지 않는다 (직접 실행할 때만 띄운다) — 의도한 동작이다.
-  programs.zellij = {
+  programs.zellij = lib.mkIf pkgs.stdenv.isDarwin {
     enable = true;
     settings = {
       # Ghostty 와 동일한 색 테마로 통일. catppuccin-mocha 는 zellij 내장 테마라

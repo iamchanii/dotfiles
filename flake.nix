@@ -17,6 +17,16 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Fedora에서는 공식 저장소 main을 고정해 차기 Ghostty 개발판을 직접 빌드한다.
+    ghostty.url = "github:ghostty-org/ghostty";
+
+    # Toshy의 xwaykeyz 런타임을 Nix로 고정한다. 사용자 서비스와 KWin 파일은
+    # upstream install-user-files가 관리하고 Fedora의 udev 설정은 시스템에 남긴다.
+    toshy = {
+      url = "github:RedBearAK/Toshy/main";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # 에이전트 스킬(SKILL.md 디렉터리)을 선언적으로 관리한다.
     agent-skills.url = "github:Kyure-A/agent-skills-nix";
 
@@ -28,6 +38,12 @@
 
     anthropics-skills = {
       url = "github:anthropics/skills";
+      flake = false;
+    };
+
+    # JetBrains Mono Nerd Font 와 Pretendard 를 합친 한영 고정폭 폰트.
+    jetendard = {
+      url = "github:kuskhan/jetendard";
       flake = false;
     };
   };
@@ -53,6 +69,17 @@
             home-manager.users.${user} = import ./home.nix;
           }
         ];
+      };
+
+      # Fedora Asahi에서는 시스템 설정을 건드리지 않고 기존 Lix 위에서
+      # standalone Home Manager 구성만 활성화한다.
+      homeConfigurations."${user}@fedora" = home-manager.lib.homeManagerConfiguration {
+        pkgs = import nixpkgs {
+          system = "aarch64-linux";
+          config.allowUnfree = true;
+        };
+        extraSpecialArgs = { inherit inputs user; };
+        modules = [ ./linux.nix ];
       };
     };
 }

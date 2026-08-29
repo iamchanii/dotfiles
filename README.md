@@ -1,6 +1,70 @@
 # dotfiles
 
-nix-darwin 과 home-manager 로 관리하는 macOS 설정.
+nix-darwin 과 Home Manager 로 관리하는 macOS 및 Fedora Asahi 설정.
+
+## 지원 머신
+
+- Apple Silicon macOS: `darwinConfigurations.Chanhees-MacBook-Pro`
+- Fedora Asahi Remix (`aarch64-linux`): `homeConfigurations."chanhee@fedora"`
+
+Fedora에서는 배포판의 기존 Lix를 그대로 사용하고 standalone Home Manager만
+적용한다. `make switch`와 `make build`는 실행 중인 OS에 맞는 출력을 자동 선택한다.
+
+최초 적용은 다음 두 명령으로 한다. 두 번째 명령은 `/etc/shells` 등록을 위해
+sudo 암호를 요구하며 한 번만 실행하면 된다.
+
+```sh
+make switch
+make setup-gpu-linux
+make set-shell-linux
+```
+
+`setup-gpu-linux`는 Ghostty와 Chromium 같은 Nix GUI 앱이 사용할 Mesa 드라이버를
+`/run/opengl-driver`에 연결한다. Fedora Asahi에서도 최초 1회 실행해야 한다.
+
+Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`에 고정해
+직접 빌드한다. 현재 upstream 버전 표기는 `1.3.2-dev`이며 아직 별도의 1.4 브랜치나
+태그는 없다. Mac은 계속 nixpkgs의 `ghostty-bin`을 사용한다.
+
+### Fedora 구성
+
+- Node.js, Bun, Git, GitHub CLI
+- Nushell 로그인 셸과 Starship
+- Ghostty 개발판 (공식 `main` 소스 빌드, Jetendard 폰트, 불투명도 설정 없음)
+- Neovim + NvChad
+- npm 전역 `defuddle`
+- npm/pnpm/Yarn/Bun의 최소 릴리스 경과 시간 1일 설정
+- Codex용 선언적 Agent Skills
+- Chromium
+- 1Password 데스크톱 앱과 `op` CLI
+- Fcitx 5 + Hangul (Home Manager 패키지/설정, 오른쪽 Meta 전환)
+- Toshy 공식 Flake 런타임 (Fedora udev 설정과 사용자 파일 설치는 별도)
+
+#### Fcitx 5와 Toshy
+
+Fcitx 5 본체와 Hangul/GTK 애드온, 설정 도구는 nixpkgs에서 설치한다. KDE
+Wayland에서는 KWin의 가상 키보드 frontend를 사용하므로 `kwinrc`에서 **Fcitx 5**가
+선택돼 있어야 한다. `config`와 `profile`은 Home Manager가 관리하며 오른쪽 Meta가
+보내는 `Hangul` 키로 `keyboard-us`와 `hangul`을 전환한다. Fedora의 자동 시작은
+사용하지 않고 Home Manager user service가 Nix의 Fcitx를 실행한다. KWin의 Fedora
+Wayland launcher desktop entry는 실행 중인 daemon과 KWin을 연결하기 위해 유지한다.
+
+Toshy는 upstream 공식 Flake의 실험적 Home Manager 모듈로 Python/xwaykeyz
+런타임을 고정한다. udev 규칙, `uinput` 모듈 및 `input` 그룹은 NixOS 모듈 전용이라
+Fedora에서는 Toshy 설치기가 만든 시스템 설정을 유지한다. 새 머신에서는 해당
+설정을 준비하고 재로그인한 뒤 다음 명령으로 사용자 서비스와 KWin 파일을 설치한다.
+
+```sh
+make setup-toshy-linux
+```
+
+이 명령은 upstream `install-user-files`를 실행한 뒤 업데이트 보존 구간에
+`Right Meta -> Hangul` 매핑을 멱등적으로 추가한다. 기존 설치를 업데이트할 때도
+같은 명령을 사용할 수 있다.
+
+Google Chrome은 공식 ARM64 RPM 다운로드가 아직 제공되지 않아 Fedora에서는
+nixpkgs의 `aarch64-linux` Chromium을 사용한다. Mac의 Homebrew Chrome 구성은
+그대로 유지한다.
 
 ## 구성 내용
 
