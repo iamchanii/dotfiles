@@ -1,10 +1,11 @@
-{ lib, pkgs, ... }:
+{ inputs, lib, pkgs, ... }:
 {
   # 사용자 패키지
   home.packages =
     [
       pkgs.nodejs # Node.js (현재 LTS)
       pkgs.gh # 설정 파일은 GitHub CLI가 직접 관리
+      inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     ]
     # uv 는 기존 Mac 구성에만 유지한다.
     ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.uv ];

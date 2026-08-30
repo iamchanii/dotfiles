@@ -24,6 +24,12 @@
     # Fedora에서는 공식 저장소 main을 고정해 차기 Ghostty 개발판을 직접 빌드한다.
     ghostty.url = "github:ghostty-org/ghostty";
 
+    # AI 코딩 에이전트용 터미널 워크스페이스 관리자.
+    herdr = {
+      url = "github:herdrdev/herdr";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Toshy의 xwaykeyz 런타임을 Nix로 고정한다. 사용자 서비스와 KWin 파일은
     # upstream install-user-files가 관리하고 Fedora의 udev 설정은 시스템에 남긴다.
     toshy = {
@@ -85,7 +91,7 @@
       # standalone Home Manager 구성만 활성화한다.
       homeConfigurations."${user}@fedora" = home-manager.lib.homeManagerConfiguration {
         pkgs = import nixpkgs {
-          system = "aarch64-linux";
+          localSystem.system = "aarch64-linux";
           config.allowUnfree = true;
         };
         extraSpecialArgs = { inherit inputs user; };
