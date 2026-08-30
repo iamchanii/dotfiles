@@ -9,7 +9,7 @@
       if pkgs.stdenv.isDarwin then
         null
       else
-        inputs.ghostty.packages.${pkgs.system}.default;
+        inputs.ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default;
     settings = {
       # Ghostty 는 기본적으로 $SHELL 환경변수를 따르는데, macOS GUI 로그인 세션의
       # $SHELL 은 로그인 시점 값(/bin/zsh)으로 캐시돼 dscl 로 셸을 바꿔도 재로그인
