@@ -8,6 +8,7 @@
     ./shell.nix
     ./terminals.nix
     ./editor.nix
+    ./agent.nix
     ./agent-skills.nix
     ./npm-global-pkgs.nix
   ];

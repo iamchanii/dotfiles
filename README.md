@@ -109,8 +109,8 @@ nix --version
 ### 2. 저장소 클론
 
 ```sh
-git clone <repo-url> ~/workspaces/dotfiles
-cd ~/workspaces/dotfiles
+git clone <repo-url> ~/workspace/dotfiles
+cd ~/workspace/dotfiles
 ```
 
 ### 3. Homebrew 설치
@@ -172,7 +172,7 @@ Karabiner 는 커널 수준 드라이버를 쓰기 때문에 `make switch` 후 m
    curl -fsSL https://install.determinate.systems/nix | sh -s -- install
    설치 후 nix 가 PATH 에 잡히는지 `nix --version` 으로 확인한다.
 
-2. dotfiles 저장소를 ~/workspaces/dotfiles 에 클론하고 그 디렉터리로 이동한다.
+2. dotfiles 저장소를 ~/workspace/dotfiles 에 클론하고 그 디렉터리로 이동한다.
    (이미 클론되어 있으면 이 단계는 건너뛴다.)
 
 3. 현재 머신의 호스트명을 `scutil --get LocalHostName` 으로 확인한다.
