@@ -39,6 +39,11 @@ Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`�
 - 1Password 데스크톱 앱과 `op` CLI
 - Fcitx 5 + Hangul (Home Manager 패키지/설정, 오른쪽 Meta 전환)
 - Toshy 공식 Flake 런타임 (Fedora udev 설정과 사용자 파일 설치는 별도)
+- KDE Plasma Catppuccin Mocha/Blue 테마 (Classic 창 장식과 커서 포함)
+
+Catppuccin KDE는 공식 저장소의 생성 완료된 리소스를 `flake.lock`에 고정해 Nix
+패키지로 조립한다. `make switch`를 KDE 세션에서 실행하면 Mocha/Blue 전역 테마와
+Classic Aurorae 창 장식, 색상표, 스플래시 및 Mocha/Blue 커서를 함께 적용한다.
 
 #### Fcitx 5와 Toshy
 

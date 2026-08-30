@@ -6,6 +6,7 @@
     ../../common/home/default.nix
     ./desktop.nix
     ./fonts.nix
+    ./theme.nix
     ./fcitx5.nix
     ./toshy.nix
   ];

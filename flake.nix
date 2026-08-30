@@ -27,6 +27,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # KDE Plasma용 Catppuccin 리소스. upstream의 생성 완료된 파일만 사용한다.
+    catppuccin-kde = {
+      url = "github:catppuccin/kde";
+      flake = false;
+    };
+
     # 에이전트 스킬(SKILL.md 디렉터리)을 선언적으로 관리한다.
     agent-skills.url = "github:Kyure-A/agent-skills-nix";
 

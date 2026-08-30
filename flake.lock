@@ -35,6 +35,22 @@
         "type": "github"
       }
     },
+    "catppuccin-kde": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785962126,
+        "narHash": "sha256-Yj+Nj8N4YgHkmPN4TXAinajpVuU0rEbk1Jl1UU7w6bU=",
+        "owner": "catppuccin",
+        "repo": "kde",
+        "rev": "6606b5179cfc1e9ba5c3b6b70e15c468e2dddca2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "catppuccin",
+        "repo": "kde",
+        "type": "github"
+      }
+    },
     "determinate": {
       "inputs": {
         "determinate-nixd-aarch64-darwin": "determinate-nixd-aarch64-darwin",
@@ -498,6 +514,7 @@
       "inputs": {
         "agent-skills": "agent-skills",
         "anthropics-skills": "anthropics-skills",
+        "catppuccin-kde": "catppuccin-kde",
         "determinate": "determinate",
         "ghostty": "ghostty",
         "home-manager": "home-manager_3",
