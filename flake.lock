@@ -404,6 +404,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-fcitx": {
+      "locked": {
+        "lastModified": 1787814960,
+        "narHash": "sha256-PYZq1qzCJXC2zGI0mH07vrZBsw6DRBAOX0jN1pPtqOQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "c27cdad491a991b11ed731760aa2ef8db0cb0410",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-regression": {
       "locked": {
         "lastModified": 1643052045,
@@ -522,6 +538,7 @@
         "nix-darwin": "nix-darwin",
         "nix4nvchad": "nix4nvchad",
         "nixpkgs": "nixpkgs_5",
+        "nixpkgs-fcitx": "nixpkgs-fcitx",
         "obsidian-skills": "obsidian-skills",
         "toshy": "toshy"
       }

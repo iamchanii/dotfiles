@@ -1,7 +1,11 @@
-{ pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
+let
+  fcitxPkgs = import inputs.nixpkgs-fcitx {
+    inherit (pkgs) system;
+  };
+  fcitxPackage = config.i18n.inputMethod.package;
+in
 {
-  home.packages = [ pkgs.qt6Packages.fcitx5-configtool ];
-
   # KDE Wayland에서는 KWin의 input-method frontend를 쓰고 XWayland용 XIM만
   # 유지한다. Fedora의 /etc/profile.d/fcitx5.sh가 설정한 툴킷 변수를 덮는다.
   xdg.configFile."plasma-workspace/env/fcitx5-wayland.sh" = {
@@ -15,11 +19,28 @@
     '';
   };
 
-  # Fedora fcitx5-autostart가 /usr/bin/fcitx5를 별도로 띄우지 않게 하고 아래의
-  # Home Manager user service가 Nix 패키지만 실행하도록 한다.
+  # Fedora fcitx5-autostart가 /usr/bin/fcitx5를 별도로 띄우지 않게 한다.
+  # KDE Wayland에서는 KWin launcher가 Nix의 Fcitx를 D-Bus로 활성화한다.
   xdg.configFile."autostart/org.fcitx.Fcitx5.desktop".text = ''
     [Desktop Entry]
     Hidden=true
+  '';
+
+  # Fedora launcher 패키지를 제거해도 KWin이 사용할 수 있는 Nix launcher를 둔다.
+  xdg.dataFile."applications/fcitx5-wayland-launcher.desktop".text = ''
+    [Desktop Entry]
+    Name=Fcitx 5 Wayland Launcher
+    Exec=${fcitxPackage}/libexec/fcitx5-wayland-launcher --reopen
+    Icon=fcitx
+    Terminal=false
+    Type=Application
+    Categories=System;Utility;
+    StartupNotify=false
+    NoDisplay=true
+    OnlyShowIn=KDE
+    X-KDE-StartupNotify=false
+    X-KDE-Wayland-VirtualKeyboard=true
+    X-KDE-Wayland-Interfaces=org_kde_plasma_window_management
   '';
 
   # Fcitx의 나머지 conf 파일은 GUI가 계속 관리할 수 있도록 두 파일만 선언한다.
@@ -44,8 +65,6 @@
       DefaultPageSize=5
       OverrideXkbOption=False
       CustomXkbOption=
-      EnabledAddons=
-      DisabledAddons=
       PreloadInputMethod=True
     '';
   };
@@ -76,14 +95,22 @@
     type = "fcitx5";
     fcitx5 = {
       waylandFrontend = true;
-      # Nix 패키지를 user service로 실행한다. Fedora의 KWin launcher는 실행 중인
-      # daemon에 Wayland input-method 연결을 전달하는 용도로 계속 사용한다.
-      systemd.enable = true;
-      addons = with pkgs; [
+      fcitx5-with-addons = fcitxPkgs.qt6Packages.fcitx5-with-addons;
+      addons = with fcitxPkgs; [
         fcitx5-hangul
         fcitx5-gtk
       ];
-      sessionVariables.XMODIFIERS = "@im=fcitx";
     };
   };
+
+  # KDE Wayland에서는 KWin launcher 하나만 daemon을 활성화해야 한다.
+  systemd.user.services.fcitx5-daemon.Install.WantedBy = lib.mkForce [ ];
+
+  home.activation.selectNixFcitxKwinLauncher = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 \
+      --file kwinrc --group Wayland --key 'InputMethod[$e]' --delete
+    ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 \
+      --file kwinrc --group Wayland --key InputMethod --type path \
+      '${config.home.homeDirectory}/.local/share/applications/fcitx5-wayland-launcher.desktop'
+  '';
 }

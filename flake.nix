@@ -4,6 +4,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
+    # Fcitx는 keyboard-us 초기화가 수정된 최신 릴리스를 별도로 고정한다.
+    # 나머지 시스템 패키지 갱신과 분리해 입력기 전환의 변경 범위를 제한한다.
+    nixpkgs-fcitx.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
 

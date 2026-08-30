@@ -47,12 +47,12 @@ Classic Aurorae 창 장식, 색상표, 스플래시 및 Mocha/Blue 커서를 함
 
 #### Fcitx 5와 Toshy
 
-Fcitx 5 본체와 Hangul/GTK 애드온, 설정 도구는 nixpkgs에서 설치한다. KDE
+Fcitx 5 본체와 Hangul/GTK/Qt 애드온은 별도 nixpkgs 입력에 고정해 설치한다. KDE
 Wayland에서는 KWin의 가상 키보드 frontend를 사용하므로 `kwinrc`에서 **Fcitx 5**가
 선택돼 있어야 한다. `config`와 `profile`은 Home Manager가 관리하며 오른쪽 Meta가
 보내는 `Hangul` 키로 `keyboard-us`와 `hangul`을 전환한다. Fedora의 자동 시작은
-사용하지 않고 Home Manager user service가 Nix의 Fcitx를 실행한다. KWin의 Fedora
-Wayland launcher desktop entry는 실행 중인 daemon과 KWin을 연결하기 위해 유지한다.
+사용하지 않고 Home Manager가 설치한 KWin Wayland launcher가 Nix Fcitx를 실행한다.
+Home Manager 모듈의 별도 user service는 자동 시작하지 않아 중복 실행을 막는다.
 
 Toshy는 upstream 공식 Flake의 실험적 Home Manager 모듈로 Python/xwaykeyz
 런타임을 고정한다. udev 규칙, `uinput` 모듈 및 `input` 그룹은 NixOS 모듈 전용이라
