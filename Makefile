@@ -19,7 +19,8 @@ build: build-linux
 endif
 
 switch-darwin:
-	@OUT="$$(nix build --no-link --print-out-paths $(FLAKE)#darwinConfigurations.$(HOST).system)"; \
+	@set -eu; \
+	OUT="$$(nix build --no-link --print-out-paths $(FLAKE)#darwinConfigurations.$(HOST).system)"; \
 	echo ">> sudo $$OUT/sw/bin/darwin-rebuild activate"; \
 	sudo "$$OUT/sw/bin/darwin-rebuild" activate
 
@@ -29,7 +30,8 @@ build-darwin:
 
 # Fedora Asahi standalone Home Manager 구성.
 switch-linux:
-	@OUT="$$(nix build --no-link --print-out-paths $(FLAKE)#homeConfigurations.chanhee@fedora.activationPackage)"; \
+	@set -eu; \
+	OUT="$$(nix build --no-link --print-out-paths $(FLAKE)#homeConfigurations.chanhee@fedora.activationPackage)"; \
 	"$$OUT/activate"
 	@if [ "$$SHELL" != "$(HOME)/.nix-profile/bin/nu" ]; then \
 		echo ">> 최초 1회 'make set-shell-linux'를 실행해 Nushell을 로그인 셸로 지정하세요."; \
