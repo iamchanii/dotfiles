@@ -29,6 +29,7 @@ Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`�
 ### Fedora 구성
 
 - Node.js, Bun, Git, GitHub CLI
+- JDK 11 및 Nushell `JAVA_HOME` (Books App Android 빌드용)
 - Nushell 로그인 셸과 Starship
 - Ghostty 개발판 (공식 `main` 소스 빌드, Jetendard 폰트, 불투명도 설정 없음)
 - Neovim + NvChad
