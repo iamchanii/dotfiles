@@ -11,6 +11,7 @@
 
   home.packages = with pkgs; [
     bun
+    pnpm
     chromium
     _1password-gui
     _1password-cli
