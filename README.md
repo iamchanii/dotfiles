@@ -28,7 +28,7 @@ Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`�
 
 ### Fedora 구성
 
-- Node.js, Bun, Git, GitHub CLI
+- Node.js, pnpm 12.4.0, Bun, Git, GitHub CLI
 - JDK 11 및 Nushell `JAVA_HOME` (Books App Android 빌드용)
 - Nushell 로그인 셸과 Starship
 - Ghostty 개발판 (공식 `main` 소스 빌드, Jetendard 폰트, 불투명도 설정 없음)
@@ -78,6 +78,7 @@ nixpkgs의 `aarch64-linux` Chromium을 사용한다. Mac의 Homebrew Chrome 구�
 - **NvChad** — Neovim IDE 구성 (nix4nvchad, `programs.nvchad.enable`)
 - **GitHub CLI** (`gh`) — `programs.gh.enable`
 - **Node.js** — `home.packages` (`pkgs.nodejs`)
+- **pnpm 12.4.0** — Mac/Fedora 공통 `home.packages`, 플랫폼별 공식 ARM64 네이티브 바이너리 사용 (`common/home/cli.nix`)
 - **nushell** — 기본 로그인 셸 (`programs.nushell`, `users.users.chanhee.shell`). starship 통합은 `enableNushellIntegration` 으로 자동 구성. zsh 는 복구용 안전망으로만 남겨둠 (`/etc/zshrc`)
 - **Zellij** — 터미널 멀티플렉서 (`programs.zellij`). catppuccin-mocha 테마, 내부 pane 도 nushell 사용. nushell 자동 시작 통합은 없어 직접 실행할 때만 뜸
 - **키보드 반복 속도 튜닝** — `KeyRepeat=2`, `InitialKeyRepeat=10`, 길게 누르기 시 액센트 메뉴 대신 반복 입력
