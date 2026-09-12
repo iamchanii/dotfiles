@@ -53,8 +53,16 @@ in
       pkgs.gh # 설정 파일은 GitHub CLI가 직접 관리
       inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
     ]
-    # uv 는 기존 Mac 구성에만 유지한다.
-    ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.uv ];
+    # uv 와 Ruby 는 Mac 구성에만 설치한다.
+    ++ lib.optionals pkgs.stdenv.isDarwin [
+      pkgs.uv
+      # nixpkgs의 Ruby 4.0.5 대신 최신 안정판을 고정한다.
+      (pkgs.mkRuby {
+        version = pkgs.mkRubyVersion "4" "0" "6" "";
+        hash = "sha256:837d299e8f7ddf2be31a229a7a7e019d354979825117989acb3b32b1a9be262a";
+        cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
+      })
+    ];
 
   # home-manager 자기 자신을 관리
   programs.home-manager.enable = true;
