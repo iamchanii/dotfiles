@@ -1,6 +1,10 @@
 { pkgs, ... }:
 {
   nixpkgs.hostPlatform = "aarch64-darwin";
+  nixpkgs.config = {
+    allowUnfree = true;
+    android_sdk.accept_license = true;
+  };
 
   # Nix 자체 관리는 Determinate Nix 에 위임한다.
   # determinateNix.enable = true 가 nix-darwin 의 내장 Nix 설정을 비활성화하므로

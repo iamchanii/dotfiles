@@ -80,6 +80,8 @@ nixpkgs의 `aarch64-linux` Chromium을 사용한다. Mac의 Homebrew Chrome 구�
 - **Node.js** — `home.packages` (`pkgs.nodejs`)
 - **pnpm 12.4.0** — Mac/Fedora 공통 `home.packages`, 플랫폼별 공식 ARM64 네이티브 바이너리 사용 (`common/home/cli.nix`)
 - **Ruby 4.0.6** — Mac 전용 `home.packages`, nixpkgs의 `mkRuby`로 최신 안정판 고정 (`common/home/cli.nix`)
+- **JDK 26.0.2.1** — Mac 전용 Eclipse Temurin ARM64 안정판. `programs.java`와 Nushell에 `JAVA_HOME` 설정 (`darwin/home/default.nix`). Fedora의 Books App용 JDK 11은 유지
+- **Android SDK** — Mac 전용 Platform-Tools 37.0.0 (`adb`, `fastboot`), Command-line Tools 20.0 (`sdkmanager`, `avdmanager`), Build-Tools 37.0.0, Platform 37.0. `ANDROID_HOME`을 Nushell에도 설정. Emulator·시스템 이미지·NDK·CMake는 설치하지 않음
 - **nushell** — 기본 로그인 셸 (`programs.nushell`, `users.users.chanhee.shell`). starship 통합은 `enableNushellIntegration` 으로 자동 구성. zsh 는 복구용 안전망으로만 남겨둠 (`/etc/zshrc`)
 - **Zellij** — 터미널 멀티플렉서 (`programs.zellij`). catppuccin-mocha 테마, 내부 pane 도 nushell 사용. nushell 자동 시작 통합은 없어 직접 실행할 때만 뜸
 - **키보드 반복 속도 튜닝** — `KeyRepeat=2`, `InitialKeyRepeat=10`, 길게 누르기 시 액센트 메뉴 대신 반복 입력
@@ -89,6 +91,24 @@ nixpkgs의 `aarch64-linux` Chromium을 사용한다. Mac의 Homebrew Chrome 구�
   - **Right Option → Meh** (⌃⌥⇧, Hyper 에서 ⌘ 제외)
 
   `home.file` 로 만들어 `~/.config/karabiner/karabiner.json` 은 읽기 전용 심볼릭 링크다. 즉 **GUI 편집·저장은 불가**하며 키맵 변경은 `darwin/home/karabiner.nix` 의 `complex_modifications.rules` 에서 한다
+
+### Java와 Android SDK (macOS)
+
+`make switch` 적용 후 새 터미널에서 확인한다:
+
+```sh
+java --version
+javac --version
+adb version
+adb devices -l
+sdkmanager --list_installed
+```
+
+실기기는 USB 디버깅을 켜고 기기에 표시되는 컴퓨터 인증을 허용해야 한다.
+SDK 라이선스는 `darwin/system/core.nix`에서 수락한다. SDK는 읽기 전용 Nix store에
+있으므로 `sdkmanager --install` 대신 `darwin/home/default.nix`의 SDK 버전 목록을
+수정하고 다시 적용한다. 기존 Android 프로젝트는 해당 Gradle/AGP가 JDK 26을
+지원하는지 확인하고, 지원하지 않으면 프로젝트에 맞는 JDK를 별도로 지정한다.
 
 ## 요구사항
 

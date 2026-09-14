@@ -57,6 +57,11 @@
       flake = false;
     };
 
+    mattpocock-skills = {
+      url = "github:mattpocock/skills";
+      flake = false;
+    };
+
     # JetBrains Mono Nerd Font 와 Pretendard 를 합친 한영 고정폭 폰트.
     jetendard = {
       url = "github:kuskhan/jetendard";
