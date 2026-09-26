@@ -1,5 +1,5 @@
 {
-  description = "-";
+  description = "MacBook nix-darwin and Fedora Asahi Home Manager configuration";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -69,27 +69,14 @@
     };
   };
 
-  outputs = { self, nixpkgs, nix-darwin, home-manager, determinate, ... }@inputs:
+  outputs = { nixpkgs, nix-darwin, home-manager, ... }@inputs:
     let
       user = "chanhee";
       host = "Chanhees-MacBook-Pro";
     in {
       darwinConfigurations.${host} = nix-darwin.lib.darwinSystem {
         specialArgs = { inherit inputs user; };
-        modules = [
-          determinate.darwinModules.default
-          ./darwin.nix
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            # 기존 ~/.zshrc 처럼 home-manager 가 관리하려는 파일이 이미 있으면
-            # 덮어쓰기 오류 대신 .backup 으로 백업하고 진행한다.
-            home-manager.backupFileExtension = "backup";
-            home-manager.extraSpecialArgs = { inherit inputs user; };
-            home-manager.users.${user} = import ./darwin/home/default.nix;
-          }
-        ];
+        modules = [ ./hosts/macbook-pro.nix ];
       };
 
       # Fedora Asahi에서는 시스템 설정을 건드리지 않고 기존 Lix 위에서
@@ -101,7 +88,7 @@
           config.android_sdk.accept_license = true;
         };
         extraSpecialArgs = { inherit inputs user; };
-        modules = [ ./linux.nix ];
+        modules = [ ./hosts/fedora.nix ];
       };
     };
 }

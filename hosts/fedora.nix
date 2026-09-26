@@ -1,7 +1,7 @@
 { user, ... }:
 {
   imports = [
-    ./linux/home/default.nix
+    ../modules/linux/home
   ];
 
   home = {

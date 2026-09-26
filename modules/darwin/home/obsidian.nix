@@ -7,10 +7,10 @@
   #
   # 공식 안내(https://obsidian.md/help/cli#macOS)는 /usr/local/bin 을 쓰지만,
   # 이 구성의 로그인 셸인 nushell 은 macOS path_helper(/etc/paths)를 거치지 않아
-  # /usr/local/bin 이 PATH 에 없다(common/home/shell.nix 참고). 대신 Home Manager가
+  # /usr/local/bin 이 PATH 에 없다(modules/shared/home/shell.nix 참고). 대신 Home Manager가
   # PATH 에 넣어주는 ~/.local/bin 으로 링크해 sudo 없이 선언적으로 관리한다.
   #
-  # 앱 자체는 darwin/system/homebrew.nix 의 cask 로 설치된다. mkOutOfStoreSymlink는
+  # 앱 자체는 modules/darwin/system/homebrew.nix 의 cask 로 설치된다. mkOutOfStoreSymlink는
   # nix store 밖(여기선 /Applications)의 절대 경로를 가리키는 심링크를 만든다.
   home.file.".local/bin/obsidian".source =
     config.lib.file.mkOutOfStoreSymlink

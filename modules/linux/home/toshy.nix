@@ -41,7 +41,7 @@ in
       exec "$runtime/bin/python" ${inputs.toshy}/setup_toshy.py install-user-files "$@"
     '')
     (pkgs.writeShellScriptBin "toshy-apply-customizations" ''
-      exec ${pkgs.python3}/bin/python ${../../scripts/apply-toshy-customizations.py} "$@"
+      exec ${pkgs.python3}/bin/python ${../../../scripts/apply-toshy-customizations.py} "$@"
     '')
   ];
 

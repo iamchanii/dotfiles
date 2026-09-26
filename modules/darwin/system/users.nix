@@ -9,7 +9,6 @@
   users.users.${user} = {
     name = user;
     home = "/Users/${user}";
-    uid = 501; # 기존 계정 uid (id -u 로 확인). knownUsers 에 필요.
     shell = pkgs.nushell; # 로그인 셸을 nushell 로 변경
   };
 

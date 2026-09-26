@@ -10,8 +10,47 @@ nix-darwin 과 Home Manager 로 관리하는 macOS 및 Fedora Asahi 설정.
 Fedora에서는 배포판의 기존 Lix를 그대로 사용하고 standalone Home Manager만
 적용한다. `make switch`와 `make build`는 실행 중인 OS에 맞는 출력을 자동 선택한다.
 
-최초 적용은 다음 두 명령으로 한다. 두 번째 명령은 `/etc/shells` 등록을 위해
-sudo 암호를 요구하며 한 번만 실행하면 된다.
+## 저장소 구조
+
+```text
+flake.nix                      # 입력과 두 환경의 출력 연결
+flake.lock                     # 기존 의존성 버전 고정
+hosts/
+  macbook-pro.nix               # Mac 모듈 조합, 플랫폼, UID, 상태 버전
+  fedora.nix                    # Fedora 모듈 조합, 사용자 홈, 상태 버전
+modules/
+  shared/home/                 # 공통 CLI, Git, 셸, 에디터, 에이전트 설정
+  darwin/
+    system/                    # Determinate, macOS defaults, Homebrew, 폰트, 계정
+    home-manager.nix           # nix-darwin과 Home Manager 통합
+    home/                      # Mac 전용 Java/Android, Karabiner, Obsidian 설정
+  linux/home/                  # Fedora Java/Android, KDE, 입력기, 폰트, Toshy
+common/agent/AGENTS.md         # 두 환경에서 직접 참조하는 에이전트 지침 원본
+scripts/                       # 모듈에서 사용하는 보조 스크립트
+```
+
+공통 사용자 설정은 `modules/shared/home`에서 관리하고, 각 OS의 Home Manager
+진입점이 이를 가져온다. 셸 PATH와 터미널처럼 대부분을 공유하는 설정의 작은 OS
+분기는 공통 모듈 안에 유지한다. Mac의 시스템 설정은 `modules/darwin/system`에만
+두며, Fedora의 시스템 설정은 배포판이 계속 관리한다.
+
+Mac에서는 `determinateNix.enable = true`가 nix-darwin의 Nix 관리를 비활성화한다.
+설정이 필요하면 `determinateNix.customSettings`를 사용한다.
+([공식 안내](https://docs.determinate.systems/guides/nix-darwin/))
+
+기존 `nixpkgs` 공유 입력은 `follows`를 유지한다. Fcitx의 별도 버전 고정과
+Determinate·Ghostty 등 upstream 자체의 의존성 고정은 이번 구조 변경에서 바꾸지
+않는다. `system.stateVersion`과 `home.stateVersion`도 호환성 기준값이므로
+패키지 업데이트에 맞춰 올리지 않는다.
+
+Mac을 추가할 때는 `hosts/`에 머신별 파일을 추가하고 `flake.nix`에
+`darwinConfigurations` 출력을 연결한다. 기존 모듈을 재사용하고 UID·플랫폼 등
+실제 차이만 지정한다. 현재 패키지 구성은 두 OS 모두 ARM64를 대상으로 한다.
+
+## Fedora 최초 적용
+
+최초 적용은 다음 세 명령으로 한다. GPU 설정과 로그인 셸 등록은 sudo 권한이
+필요하며 최초 한 번 실행한다.
 
 ```sh
 make switch
@@ -84,19 +123,19 @@ nixpkgs의 `aarch64-linux` Chromium을 사용한다. Mac의 Homebrew Chrome 구�
 - **NvChad** — Neovim IDE 구성 (nix4nvchad, `programs.nvchad.enable`)
 - **GitHub CLI** (`gh`) — `programs.gh.enable`
 - **Node.js** — `home.packages` (`pkgs.nodejs`)
-- **pnpm 12.4.0** — Mac/Fedora 공통 `home.packages`, 플랫폼별 공식 ARM64 네이티브 바이너리 사용 (`common/home/cli.nix`)
-- **Ruby 4.0.6** — Mac 전용 `home.packages`, nixpkgs의 `mkRuby`로 최신 안정판 고정 (`common/home/cli.nix`)
-- **JDK 26.0.2.1** — Mac 전용 Eclipse Temurin ARM64 안정판. `programs.java`와 Nushell에 `JAVA_HOME` 설정 (`darwin/home/default.nix`). Fedora의 Books App용 JDK 11은 유지
+- **pnpm 12.4.0** — Mac/Fedora 공통 `home.packages`, 플랫폼별 공식 ARM64 네이티브 바이너리 사용 (`modules/shared/home/cli.nix`)
+- **Ruby 4.0.6** — Mac 전용 `home.packages`, nixpkgs의 `mkRuby`로 최신 안정판 고정 (`modules/shared/home/cli.nix`)
+- **JDK 26.0.2.1** — Mac 전용 Eclipse Temurin ARM64 안정판. `programs.java`와 Nushell에 `JAVA_HOME` 설정 (`modules/darwin/home/default.nix`). Fedora의 Books App용 JDK 11은 유지
 - **Android SDK** — Mac 전용 Platform-Tools 37.0.0 (`adb`, `fastboot`), Command-line Tools 20.0 (`sdkmanager`, `avdmanager`), Build-Tools 37.0.0, Platform 37.0. `ANDROID_HOME`을 Nushell에도 설정. Emulator·시스템 이미지·NDK·CMake는 설치하지 않음
 - **nushell** — 기본 로그인 셸 (`programs.nushell`, `users.users.chanhee.shell`). starship 통합은 `enableNushellIntegration` 으로 자동 구성. zsh 는 복구용 안전망으로만 남겨둠 (`/etc/zshrc`)
 - **Zellij** — 터미널 멀티플렉서 (`programs.zellij`). catppuccin-mocha 테마, 내부 pane 도 nushell 사용. nushell 자동 시작 통합은 없어 직접 실행할 때만 뜸
 - **키보드 반복 속도 튜닝** — `KeyRepeat=2`, `InitialKeyRepeat=10`, 길게 누르기 시 액센트 메뉴 대신 반복 입력
-- **Homebrew cask** — brew 로 설치하는 cask 는 모두 `darwin/system/homebrew.nix` 의 `casks` 에 선언한다 (`cleanup="zap"` 로 미선언 항목은 제거). brew 바이너리 자체는 nix 가 설치하지 않으므로 선행 설치돼 있어야 한다 (아래 설치 절차 참고). 현재 cask: `karabiner-elements`, `google-chrome`, `1password`, `obsidian`
-- **Karabiner-Elements** — 키보드 커스터마이징. nix-darwin 모듈은 Karabiner v15 와 호환되지 않아 Homebrew cask 로 설치 (`darwin/system/karabiner.nix` 는 사정·수동 승인만 문서화). 키맵은 `darwin/home/karabiner.nix` 가 `karabiner.json` 을 선언적으로 생성한다:
+- **Homebrew cask** — brew 로 설치하는 cask 는 모두 `modules/darwin/system/homebrew.nix` 의 `casks` 에 선언한다 (`cleanup="zap"` 로 미선언 항목은 제거). brew 바이너리 자체는 nix 가 설치하지 않으므로 선행 설치돼 있어야 한다 (아래 설치 절차 참고). 현재 cask: `karabiner-elements`, `google-chrome`, `1password`, `obsidian`
+- **Karabiner-Elements** — 키보드 커스터마이징. nix-darwin 모듈은 Karabiner v15 와 호환되지 않아 Homebrew cask 로 설치 (`modules/darwin/system/karabiner.nix` 는 사정·수동 승인만 문서화). 키맵은 `modules/darwin/home/karabiner.nix` 가 `karabiner.json` 을 선언적으로 생성한다:
   - **Right Command → Hyper** (⌘⌃⌥⇧)
   - **Right Option → Meh** (⌃⌥⇧, Hyper 에서 ⌘ 제외)
 
-  `home.file` 로 만들어 `~/.config/karabiner/karabiner.json` 은 읽기 전용 심볼릭 링크다. 즉 **GUI 편집·저장은 불가**하며 키맵 변경은 `darwin/home/karabiner.nix` 의 `complex_modifications.rules` 에서 한다
+  `home.file` 로 만들어 `~/.config/karabiner/karabiner.json` 은 읽기 전용 심볼릭 링크다. 즉 **GUI 편집·저장은 불가**하며 키맵 변경은 `modules/darwin/home/karabiner.nix` 의 `complex_modifications.rules` 에서 한다
 
 ### Java와 Android SDK (macOS)
 
@@ -111,12 +150,12 @@ sdkmanager --list_installed
 ```
 
 실기기는 USB 디버깅을 켜고 기기에 표시되는 컴퓨터 인증을 허용해야 한다.
-SDK 라이선스는 `darwin/system/core.nix`에서 수락한다. SDK는 읽기 전용 Nix store에
-있으므로 `sdkmanager --install` 대신 `darwin/home/default.nix`의 SDK 버전 목록을
+SDK 라이선스는 `modules/darwin/system/core.nix`에서 수락한다. SDK는 읽기 전용 Nix store에
+있으므로 `sdkmanager --install` 대신 `modules/darwin/home/default.nix`의 SDK 버전 목록을
 수정하고 다시 적용한다. 기존 Android 프로젝트는 해당 Gradle/AGP가 JDK 26을
 지원하는지 확인하고, 지원하지 않으면 프로젝트에 맞는 JDK를 별도로 지정한다.
 
-## 요구사항
+## macOS 요구사항
 
 - Apple Silicon Mac (`aarch64-darwin`)
 - macOS
@@ -187,7 +226,7 @@ Karabiner 는 커널 수준 드라이버를 쓰기 때문에 `make switch` 후 m
 | --- | --- |
 | `make switch` | 빌드 후 시스템에 적용 (최초 부트스트랩 포함) |
 | `make build` | 적용하지 않고 빌드만 — 평가/빌드 오류 확인 |
-| `make check` | `nix flake check` 로 flake 출력 검사 |
+| `make check` | Flake 검사와 Mac·Fedora 빌드 정의 평가 (시스템 적용 없음) |
 | `make update` | flake 입력을 최신으로 갱신 (`flake.lock` 업데이트) |
 
 ## 에이전트용 프롬프트

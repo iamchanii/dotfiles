@@ -1,6 +1,5 @@
 { pkgs, ... }:
 {
-  nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config = {
     allowUnfree = true;
     android_sdk.accept_license = true;
@@ -26,9 +25,4 @@
   # (설정 파일은 home-manager 의 programs.ghostty 가 관리)
   environment.systemPackages = [ pkgs.ghostty-bin ];
 
-  # nix-darwin 상태 버전 (한번 정하면 변경하지 말 것).
-  # 현재 nix-darwin 의 maxStateVersion 이자 신규 설치 기본값.
-  # 6→7 의 유일한 동작 차이는 programs.tmux.enableSensible 기본값(<=6 이면 켜짐)
-  # 이며, tmux 를 nix-darwin 으로 관리하지 않는 이 구성에선 영향이 없다.
-  system.stateVersion = 7;
 }

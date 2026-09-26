@@ -64,7 +64,9 @@ build-linux:
 
 # flake 출력 평가를 검사한다.
 check:
-	nix flake check
+	nix flake check $(FLAKE)
+	nix eval --raw '$(FLAKE)#homeConfigurations."chanhee@fedora".activationPackage.drvPath'
+	nix eval --raw '$(FLAKE)#darwinConfigurations.Chanhees-MacBook-Pro.system.drvPath'
 
 # flake 입력을 최신으로 갱신한다 (flake.lock 업데이트).
 update:
