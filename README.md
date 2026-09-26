@@ -30,6 +30,7 @@ Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`�
 
 - Node.js, pnpm 12.4.0, Bun, Git, GitHub CLI
 - JDK 11 및 Nushell `JAVA_HOME` (Books App Android 빌드용)
+- Android SDK 34, Build Tools 30.0.3, ARM64 `adb` 및 `ANDROID_HOME` (SDK 라이선스 수락)
 - Nushell 로그인 셸과 Starship
 - Ghostty 개발판 (공식 `main` 소스 빌드, Jetendard 폰트, 불투명도 설정 없음)
 - Neovim + NvChad
@@ -41,6 +42,11 @@ Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`�
 - Fcitx 5 + Hangul (Home Manager 패키지/설정, 오른쪽 Meta 전환)
 - Toshy 공식 Flake 런타임 (Fedora udev 설정과 사용자 파일 설치는 별도)
 - KDE Plasma Catppuccin Mocha/Blue 테마 (Classic 창 장식과 커서 포함)
+
+Android SDK 경로는 `make switch` 후 새 Nushell 세션에 적용된다. Google의 Linux
+Build Tools와 Gradle이 받는 AAPT2는 x86_64용이므로, Fedora Asahi에서 APK를
+빌드하려면 별도로 x86_64 실행 환경이 필요하다. 위 SDK 설정만으로 ARM64에서의
+전체 Android 빌드가 보장되지는 않는다.
 
 Catppuccin KDE는 공식 저장소의 생성 완료된 리소스를 `flake.lock`에 고정해 Nix
 패키지로 조립한다. `make switch`를 KDE 세션에서 실행하면 Mocha/Blue 전역 테마와

@@ -98,6 +98,7 @@
         pkgs = import nixpkgs {
           localSystem.system = "aarch64-linux";
           config.allowUnfree = true;
+          config.android_sdk.accept_license = true;
         };
         extraSpecialArgs = { inherit inputs user; };
         modules = [ ./linux.nix ];
