@@ -10,7 +10,13 @@
   xdg.enable = true;
 
   home.packages = with pkgs; [
-    bun
+    (bun.overrideAttrs (finalAttrs: _previousAttrs: {
+      version = "1.4.2";
+      src = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${finalAttrs.version}/bun-linux-aarch64.zip";
+        hash = "sha256-VDKLvC2cjgyfiSxUTWbFeoO4QTnjSQnl7oF1jxrI/ac=";
+      };
+    }))
     chromium
     _1password-gui
     _1password-cli
