@@ -37,6 +37,7 @@
             "/opt/homebrew/bin"                     # Homebrew 패키지 (nix 보다 뒤 우선순위)
             "/opt/homebrew/sbin"
             "${config.home.homeDirectory}/.local/bin"
+            "${config.home.homeDirectory}/.bun/bin"
         ]
         | uniq
       )
@@ -47,6 +48,7 @@
         | prepend [
             "${config.home.profileDirectory}/bin"
             "${config.home.homeDirectory}/.local/bin"
+            "${config.home.homeDirectory}/.bun/bin"
         ]
         | uniq
       )
