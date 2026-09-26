@@ -473,6 +473,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-zellij": {
+      "locked": {
+        "lastModified": 1790390834,
+        "narHash": "sha256-StRyS/lFHtIw/UgJk+xo+HA66mtoWeDUbkJdvf2Byn4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d54020a6ac3211e9f4201631bdf67678818c0cdf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "d54020a6ac3211e9f4201631bdf67678818c0cdf",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1773222311,
@@ -578,6 +594,7 @@
         "nix4nvchad": "nix4nvchad",
         "nixpkgs": "nixpkgs_5",
         "nixpkgs-fcitx": "nixpkgs-fcitx",
+        "nixpkgs-zellij": "nixpkgs-zellij",
         "obsidian-skills": "obsidian-skills",
         "toshy": "toshy"
       }

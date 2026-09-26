@@ -7,6 +7,10 @@
     # Fcitx는 keyboard-us 초기화가 수정된 최신 릴리스를 별도로 고정한다.
     # 나머지 시스템 패키지 갱신과 분리해 입력기 전환의 변경 범위를 제한한다.
     nixpkgs-fcitx.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    # Zellij 0.45.1 이 들어간 nixpkgs 리비전을 고정한다. URL 에 리비전이 박혀
+    # 있어 `make update`(nix flake update) 로도 버전이 흘러가지 않는다.
+    # 메인 nixpkgs 가 0.45.1 을 넘어서면 이 입력을 제거하고 pkgs.zellij 로 돌아간다.
+    nixpkgs-zellij.url = "github:NixOS/nixpkgs/d54020a6ac3211e9f4201631bdf67678818c0cdf";
 
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";

@@ -1,4 +1,4 @@
-{ inputs, lib, pkgs, ... }:
+{ config, inputs, lib, pkgs, ... }:
 {
   # Ghostty 터미널.
   # 앱 바이너리(ghostty-bin)는 modules/darwin/system/core.nix 의 systemPackages가 설치하므로
@@ -33,19 +33,27 @@
     };
   };
 
-  # Zellij 터미널 멀티플렉서.
+  # Zellij 터미널 멀티플렉서 (macOS/Fedora 공통).
   # home-manager 의 zellij 모듈은 bash/fish/zsh 자동 시작 통합만 제공하고
   # nushell 통합은 없다. 우리 로그인 셸은 nushell 이므로 터미널을 열 때 zellij 가
-  # 자동으로 뜨지 않는다 (직접 실행할 때만 띄운다) — 의도한 동작이다.
-  programs.zellij = lib.mkIf pkgs.stdenv.isDarwin {
+  # 자동으로 뜨지 않는다 (z 또는 zellij 로 직접 실행) — 의도한 동작이다.
+  programs.zellij = {
     enable = true;
+    # 메인 nixpkgs(0.44.3) 와 별개로 0.45.1 을 담은 리비전에서 가져온다.
+    # Ghostty 입력 참조와 같은 모양이다.
+    package = inputs.nixpkgs-zellij.legacyPackages.${pkgs.stdenv.hostPlatform.system}.zellij;
     settings = {
       # Ghostty 와 동일한 색 테마로 통일. catppuccin-mocha 는 zellij 내장 테마라
       # 별도 테마 파일 정의가 필요 없다.
       theme = "catppuccin-mocha";
       # zellij 내부 pane 도 로그인 셸과 동일하게 nushell 을 쓰게 고정한다.
-      # 안정 경로(/run/current-system/sw/bin)를 써서 store 해시 변화에 영향받지 않게 한다.
-      default_shell = "/run/current-system/sw/bin/nu";
+      # store 해시가 아닌 안정 프로파일 경로를 쓴다: macOS 는 nix-darwin 시스템
+      # 프로파일(/run/current-system/sw/bin), Fedora 는 standalone Home Manager
+      # 프로파일(shell.nix 의 PATH 와 동일한 home.profileDirectory).
+      default_shell = if pkgs.stdenv.isDarwin then
+        "/run/current-system/sw/bin/nu"
+      else
+        "${config.home.profileDirectory}/bin/nu";
     };
   };
 }

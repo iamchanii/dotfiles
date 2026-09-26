@@ -16,7 +16,6 @@
     };
     shellAliases = {
       vim = "nvim";
-    } // lib.optionalAttrs pkgs.stdenv.isDarwin {
       z = "zellij";
     };
     extraEnv = lib.optionalString pkgs.stdenv.isDarwin ''
