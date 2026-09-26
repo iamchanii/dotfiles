@@ -54,6 +54,9 @@
         "/run/current-system/sw/bin/nu"
       else
         "${config.home.profileDirectory}/bin/nu";
+    } // lib.optionalAttrs pkgs.stdenv.isLinux {
+      # Zorca 플러그인/레이아웃은 Fedora 홈에만 설치한다.
+      default_layout = "zorca";
     };
   };
 }
