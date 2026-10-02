@@ -18,6 +18,7 @@ in
     ./theme.nix
     ./fcitx5.nix
     ./toshy.nix
+    ./flameshot.nix
   ];
 
   # Books App의 Gradle 8.2 / Android JDK 11 툴체인에 맞춘다.

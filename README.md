@@ -83,6 +83,9 @@ Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`�
 - 1Password 데스크톱 앱과 `op` CLI
 - Fcitx 5 + Hangul (Home Manager 패키지/설정, 오른쪽 Meta 전환)
 - Toshy 공식 Flake 런타임 (Fedora udev 설정과 사용자 파일 설치는 별도)
+- Flameshot 스크린샷 도구 (nixpkgs 패키지, 로그인 시 XDG autostart로 트레이 데몬 자동 시작).
+  색상·저장 경로는 `flameshot config` GUI가 `~/.config/flameshot`에 직접 관리하고,
+  KDE 전역 단축키(Print 등)는 시스템 설정의 사용자 지정 명령에서 `flameshot gui`에 연결한다
 - KDE Plasma Catppuccin Mocha/Blue 테마 (Classic 창 장식과 커서 포함)
 
 Android SDK 경로는 `make switch` 후 새 Nushell 세션에 적용된다. Google의 Linux
