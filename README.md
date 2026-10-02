@@ -26,6 +26,8 @@ modules/
     home/                      # Mac 전용 Java/Android, Karabiner, Obsidian 설정
   linux/home/                  # Fedora Java/Android, KDE, 입력기, 폰트, Toshy
 common/agent/AGENTS.md         # 두 환경에서 직접 참조하는 에이전트 지침 원본
+common/agent/pi/settings.json  # Pi 사용자 설정 원본 (~/.pi/agent/settings.json)
+common/agent/pi/extensions/    # Pi 확장 (~/.pi/agent/extensions). /adhd on|off 로 ADHD 출력 모드
 scripts/                       # 모듈에서 사용하는 보조 스크립트
 ```
 
