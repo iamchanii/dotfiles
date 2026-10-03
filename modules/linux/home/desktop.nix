@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   # Fedora/KDE 세션이 Nix profile의 desktop entry, 아이콘, terminfo를 찾도록 한다.
   targets.genericLinux.enable = true;
@@ -8,6 +8,16 @@
   targets.genericLinux.gpu.enable = true;
 
   xdg.enable = true;
+
+  # KDE가 덮개 이벤트를 처리하므로 logind 대신 PowerDevil 프로필을 설정한다.
+  # 다른 전원 설정은 보존하고, 적용 후 재로그인하면 반영된다.
+  home.activation.disableLidSleep = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    for profile in AC Battery LowBattery; do
+      run ${pkgs.kdePackages.kconfig}/bin/kwriteconfig6 \
+        --file powerdevilrc --group "$profile" --group SuspendAndShutdown \
+        --key LidAction 0
+    done
+  '';
 
   home.packages = with pkgs; [
     (bun.overrideAttrs (finalAttrs: _previousAttrs: {
