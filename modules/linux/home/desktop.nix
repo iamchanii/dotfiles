@@ -1,4 +1,41 @@
 { lib, pkgs, ... }:
+let
+  # Fedora ARM64에서는 시스템 폰트 폴백만으로 LocalSend의 한글이 표시되지 않는다.
+  # Flutter 기본 본문 폰트(Roboto)에 정적 Pretendard를 번들링한다.
+  localsendWithFonts = pkgs.symlinkJoin {
+    name = "localsend-${pkgs.localsend.version}";
+    inherit (pkgs.localsend) pname version meta;
+    paths = [ pkgs.localsend ];
+    postBuild = ''
+      app="$out/app/localsend"
+      assets="$app/data/flutter_assets"
+
+      # 실행 파일의 실제 경로를 기준으로 수정된 Flutter 자산을 찾도록 한다.
+      cp --remove-destination ${pkgs.localsend}/app/localsend/localsend_app "$app/localsend_app"
+      cp --remove-destination ${pkgs.localsend}/bin/localsend_app "$out/bin/localsend_app"
+      chmod u+w "$out/bin/localsend_app"
+      substituteInPlace "$out/bin/localsend_app" \
+        --replace-fail "${pkgs.localsend}/bin/.localsend_app-wrapped" "$app/localsend_app"
+      rm "$out/bin/.localsend_app-wrapped"
+
+      ln -s ${pkgs.pretendard}/share/fonts/opentype/*.otf "$assets/fonts/"
+      rm "$assets/FontManifest.json"
+      ${pkgs.jq}/bin/jq '
+        map(select(.family != "Roboto")) + [{
+          family: "Roboto",
+          fonts: ([
+            "Thin", "ExtraLight", "Light", "Regular", "Medium",
+            "SemiBold", "Bold", "ExtraBold", "Black"
+          ] | to_entries | map({
+            asset: ("fonts/Pretendard-" + .value + ".otf"),
+            weight: ((.key + 1) * 100)
+          }))
+        }]
+      ' ${pkgs.localsend}/app/localsend/data/flutter_assets/FontManifest.json \
+        > "$assets/FontManifest.json"
+    '';
+  };
+in
 {
   # Fedora/KDE 세션이 Nix profile의 desktop entry, 아이콘, terminfo를 찾도록 한다.
   targets.genericLinux.enable = true;
@@ -46,6 +83,7 @@
       };
     }))
     chromium
+    localsendWithFonts
     _1password-gui
     _1password-cli
   ];

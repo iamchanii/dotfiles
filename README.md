@@ -80,6 +80,9 @@ Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`�
 - npm/pnpm/Yarn/Bun의 최소 릴리스 경과 시간 1일 설정
 - Codex용 선언적 Agent Skills
 - Chromium
+- LocalSend 파일 전송 앱 (`home.packages`; 현재 Home Manager에는 `programs.localsend` 옵션이 없음)
+  Fedora ARM64의 한글 네모 표시를 해결하도록 앱의 기본 본문 폰트에 정적 Pretendard
+  OTF를 번들링한다 (`modules/linux/home/desktop.nix`). 시스템·터미널 폰트는 바꾸지 않는다.
 - 1Password 데스크톱 앱과 `op` CLI
 - Fcitx 5 + Hangul (Home Manager 패키지/설정, 오른쪽 Meta 전환)
 - Toshy 공식 Flake 런타임 (Fedora udev 설정과 사용자 파일 설치는 별도)
