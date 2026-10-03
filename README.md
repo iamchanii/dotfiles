@@ -87,8 +87,11 @@ Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`�
   색상·저장 경로는 `flameshot config` GUI가 `~/.config/flameshot`에 직접 관리하고,
   KDE 전역 단축키(Print 등)는 시스템 설정의 사용자 지정 명령에서 `flameshot gui`에 연결한다
 - KDE Plasma Catppuccin Mocha/Blue 테마 (Classic 창 장식과 커서 포함)
-- KDE 세션에서 덮개를 닫아도 절전하지 않음 (전원 연결·배터리·저전력 모두).
-  `make switch` 후 재로그인하면 반영된다. 유휴 절전·전원 버튼 동작은 변경하지 않는다
+- KDE 세션에서 덮개 절전·유휴 절전·자동 화면 잠금 비활성화
+  (전원 연결·배터리·저전력 모두). Pi 등 실행 중인 작업이 자동 절전으로 멈추지 않도록 한다.
+  `make switch` 시 실행 중인 KDE에도 재로그인 없이 반영한다.
+  수동 잠금·전원 버튼 동작·배터리 고갈 보호는 유지한다.
+  덮개를 열어둔 상태에서도 자동 잠금이 꺼지므로 자리를 비울 때는 수동으로 잠근다
 
 Android SDK 경로는 `make switch` 후 새 Nushell 세션에 적용된다. Google의 Linux
 Build Tools와 Gradle이 받는 AAPT2는 x86_64용이므로, Fedora Asahi에서 APK를
