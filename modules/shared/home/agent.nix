@@ -1,8 +1,8 @@
 { config, ... }:
 let
-  # dotfiles 작업 트리의 원본을 그대로 가리킨다. ~/.codex, ~/.pi 에서 수정하면
+  # dotfiles 작업 트리의 원본을 그대로 가리킨다. ~/.codex, ~/.pi, ~/.omp 에서 수정하면
   # 변경 내용이 이 저장소에 남는다.
-  dotfiles = "${config.home.homeDirectory}/workspace/dotfiles";
+  dotfiles = "${config.home.homeDirectory}/workspaces/dotfiles";
 in
 {
   home.file = {
@@ -20,5 +20,11 @@ in
     # Pi 확장(/adhd 등). 확장이 기록하는 state.json 도 작업 트리에 남는다.
     ".pi/agent/extensions".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfiles}/common/agent/pi/extensions";
+
+    # OMP 설정과 ADHD 확장만 연결한다. 기존 확장과 런타임 상태는 유지한다.
+    ".omp/agent/config.yml".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfiles}/common/agent/omp/config.yml";
+    ".omp/agent/extensions/adhd".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfiles}/common/agent/omp/extensions/adhd";
   };
 }

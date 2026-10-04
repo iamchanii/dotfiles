@@ -28,6 +28,8 @@ modules/
 common/agent/AGENTS.md         # 두 환경에서 직접 참조하는 에이전트 지침 원본
 common/agent/pi/settings.json  # Pi 사용자 설정 원본 (~/.pi/agent/settings.json)
 common/agent/pi/extensions/    # Pi 확장 (~/.pi/agent/extensions). /adhd on|off 로 ADHD 출력 모드
+common/agent/omp/config.yml    # OMP 사용자 설정 원본 (~/.omp/agent/config.yml)
+common/agent/omp/extensions/adhd/ # OMP용 /adhd 확장 (~/.omp/agent/extensions/adhd)
 scripts/                       # 모듈에서 사용하는 보조 스크립트
 ```
 
@@ -48,6 +50,21 @@ Determinate·Ghostty 등 upstream 자체의 의존성 고정은 이번 구조 �
 Mac을 추가할 때는 `hosts/`에 머신별 파일을 추가하고 `flake.nix`에
 `darwinConfigurations` 출력을 연결한다. 기존 모듈을 재사용하고 UID·플랫폼 등
 실제 차이만 지정한다. 현재 패키지 구성은 두 OS 모두 ARM64를 대상으로 한다.
+
+### 에이전트 설정
+
+`modules/shared/home/agent.nix`는 `~/workspaces/dotfiles/common/agent`의 원본을
+`mkOutOfStoreSymlink`로 연결한다. 설정과 확장을 수정하면 재빌드 없이 다음
+에이전트 실행에 반영된다. 최초 링크 적용은 `make switch`로 한다.
+
+OMP는 `~/.omp/agent/config.yml`과 `~/.omp/agent/extensions/adhd`만 관리하므로
+기존의 다른 확장, 인증 정보, 세션은 유지된다. macOS에서는 기존 설정 파일을
+Home Manager가 `.backup`으로 보관한 뒤 연결한다.
+
+Pi와 OMP 모두 `/adhd`로 상태 확인, `/adhd on`과 `/adhd off`로 전환한다.
+초기 상태는 켜짐이며, 각 확장 디렉터리의 `state.json`에 독립적으로 저장된다.
+모드 변경은 다음 프롬프트부터 반영되고 재시작 후에도 유지된다.
+OMP 버전은 기존 시스템 프롬프트 블록을 유지한 채 ADHD 규칙 블록을 추가한다.
 
 ## 셸 환경: Tern과 Ghostty
 
@@ -252,8 +269,8 @@ nix --version
 ### 2. 저장소 클론
 
 ```sh
-git clone <repo-url> ~/workspace/dotfiles
-cd ~/workspace/dotfiles
+git clone <repo-url> ~/workspaces/dotfiles
+cd ~/workspaces/dotfiles
 ```
 
 ### 3. Homebrew 설치
@@ -315,7 +332,7 @@ Karabiner 는 커널 수준 드라이버를 쓰기 때문에 `make switch` 후 m
    curl -fsSL https://install.determinate.systems/nix | sh -s -- install
    설치 후 nix 가 PATH 에 잡히는지 `nix --version` 으로 확인한다.
 
-2. dotfiles 저장소를 ~/workspace/dotfiles 에 클론하고 그 디렉터리로 이동한다.
+2. dotfiles 저장소를 ~/workspaces/dotfiles 에 클론하고 그 디렉터리로 이동한다.
    (이미 클론되어 있으면 이 단계는 건너뛴다.)
 
 3. 현재 머신의 호스트명을 `scutil --get LocalHostName` 으로 확인한다.

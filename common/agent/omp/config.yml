@@ -1,0 +1,72 @@
+modelRoles:
+  # 메인 작업 (평소 대부분)
+  default: zai/glm-5.3:high
+
+  # 계획 / 아키텍처
+  plan: openai/gpt-6.1-sol:xhigh          # 또는 openai/gpt-6-sol:xhigh
+
+  # 복잡한 리팩터·장시간 작업
+  slow: openai/gpt-6.1-sol:high
+
+  # 서브에이전트 / task 역할
+  task: zai/glm-5.3-flash:medium
+
+  # 가벼운 작업·커밋 메시지
+  smol: zai/glm-5.3-flash:low
+  commit: zai/glm-5.3-flash:low
+  tiny: zai/glm-5.3-flash:low             # 배경 작업 (제목, 메모리 등)
+
+retry:
+  enabled: true
+  modelFallback: true
+  fallbackRevertPolicy: cooldown-expiry   # 쿨다운 끝나면 원래 모델로 복귀
+  maxRetries: 10
+  baseDelayMs: 500
+  maxDelayMs: 300000                      # 5분
+
+  fallbackChains:
+    # default 역할이 막히면
+    default:
+      - zai/glm-5.3:high
+      - zai/glm-5.3-flash:high            # 같은 계열 빠른 버전
+      - openai/gpt-6.1-sol:high           # Codex Plus
+      - openai/gpt-6-sol:high             # 백업
+
+    # plan / slow 가 막히면
+    plan:
+      - openai/gpt-6.1-sol:xhigh
+      - openai/gpt-6-sol:xhigh
+      - zai/glm-5.3:max                  # 최후 수단으로 GLM 최대 reasoning
+
+    slow:
+      - openai/gpt-6.1-sol:high
+      - openai/gpt-6-sol:high
+      - zai/glm-5.3:high
+
+    # 서브에이전트 / 가벼운 작업
+    task:
+      - zai/glm-5.3-flash:medium
+      - zai/glm-5.3:medium
+      - openai/gpt-6-luna:medium         # Codex 저렴한 버전
+
+    smol:
+      - zai/glm-5.3-flash:low
+      - openai/gpt-6-luna:low
+
+    # provider 단위 와일드카드 (선택)
+    zai/*:
+      - openai/gpt-6.1-sol:high
+      - openai/gpt-6-sol:high
+
+    openai/*:
+      - zai/glm-5.3:high
+      - zai/glm-5.3-flash:high
+
+symbolPreset: nerd
+composer:
+  shape: band
+theme:
+  dark: amethyst
+setupVersion: 2
+dev:
+  autoqaConsent: denied
