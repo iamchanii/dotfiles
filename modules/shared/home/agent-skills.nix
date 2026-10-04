@@ -21,7 +21,10 @@
     skills.enableAll = true;
 
     targets.codex.enable = true;
-    targets.pi.enable = true;
+    targets.pi = {
+      enable = true;
+      dest = "$HOME/.pi/agent/skills";
+    };
     targets.omp = {
       enable = true;
       dest = "$HOME/.omp/agent/skills";
