@@ -1,14 +1,63 @@
 { config, lib, pkgs, ... }:
+let
+  nixProfile = "/nix/var/nix/profiles/default";
+  searchVariables = lib.unique (
+    builtins.attrNames config.home.sessionSearchVariables
+    ++ [ "PATH" "XDG_DATA_DIRS" "TERMINFO_DIRS" "MANPATH" ]
+  );
+  sessionVariables = lib.unique (
+    builtins.attrNames (lib.filterAttrs (_: value: value != null) config.home.sessionVariables)
+    ++ searchVariables
+    ++ [ "NIX_PROFILES" "NIX_SSL_CERT_FILE" ]
+  );
+  # POSIX 전개를 재구현하지 않고 Home Manager와 기존 Nix 초기화를 재사용한다.
+  # 가드는 자식 프로세스에서만 해제해 오래된 부모 환경의 영향을 받지 않는다.
+  sessionLoader = pkgs.writeShellScript "nushell-session-environment" ''
+    set -e
+    unset __HM_SESS_VARS_SOURCED __ETC_PROFILE_NIX_SOURCED
+    . "${config.home.sessionVariablesPackage}/etc/profile.d/hm-session-vars.sh" >&2
+    if [ -r "${nixProfile}/etc/profile.d/nix-daemon.sh" ]; then
+      . "${nixProfile}/etc/profile.d/nix-daemon.sh" >&2
+    fi
+    for name in ${lib.escapeShellArgs sessionVariables}; do
+      if [[ -v "$name" ]]; then
+        printf '%s=%s\0' "$name" "''${!name}"
+      fi
+    done
+  '';
+  sessionEnv = pkgs.writeText "session-env.nu" (
+    lib.replaceStrings
+      [ "@bash@" "@loader@" "@searchVars@" ]
+      (map (lib.hm.nushell.toNushell { }) [
+        "${pkgs.bash}/bin/bash"
+        (toString sessionLoader)
+        searchVariables
+      ])
+      (builtins.readFile ../../../scripts/session-env.nu)
+  );
+in
 {
+  # 경로는 한 번 선언하고 POSIX 셸과 Nushell이 같은 Home Manager 값을 사용한다.
+  home.sessionPath = [
+    "${config.home.profileDirectory}/bin"
+    "${nixProfile}/bin"
+    "${config.home.homeDirectory}/.local/bin"
+  ] ++ lib.optionals pkgs.stdenv.isDarwin [
+    "/run/current-system/sw/bin"
+    "/opt/homebrew/bin"
+    "/opt/homebrew/sbin"
+  ];
+  home.sessionVariables = lib.optionalAttrs pkgs.stdenv.isDarwin {
+    HOMEBREW_PREFIX = "/opt/homebrew";
+    HOMEBREW_CELLAR = "/opt/homebrew/Cellar";
+    HOMEBREW_REPOSITORY = "/opt/homebrew";
+  };
   # nushell 을 home-manager 로 관리한다. macOS 에서는
   # ~/Library/Application Support/nushell/{env,config}.nu 가 선언적으로 생성된다.
   # 로그인 셸 지정은 modules/darwin/system/users.nix 에서 한다.
   #
-  # PATH 주의: zsh/bash 와 달리 nushell 은 Determinate Nix / nix-darwin 의 셸
-  # 초기화 스니펫(/etc/zshrc 등)을 읽지 않고, home-manager 의 home.sessionPath
-  # (POSIX hm-session-vars.sh)도 source 하지 않는다. 따라서 그 스니펫들이
-  # 넣어주던 nix 관련 경로를 nushell env.nu 에서 직접 PATH 에 추가해야 한다.
-  # extraEnv 는 env.nu 로 들어가며 config.nu(starship 통합)보다 먼저 로드된다.
+  # env.nu에서 공통 세션 환경을 읽으므로 터미널/로그인 방식에 의존하지 않는다.
+  # 상속한 PATH 순서를 유지하고 누락 경로만 보충해 nix develop 등도 보존한다.
   programs.nushell = {
     enable = true;
     settings = {
@@ -18,39 +67,8 @@
       vim = "nvim";
       z = "zellij";
     };
-    extraEnv = lib.optionalString pkgs.stdenv.isDarwin ''
-      # Homebrew 환경 변수. zsh/bash 는 `brew shellenv`(/etc/zprofile 등)로
-      # 이 값들을 받지만 nushell 은 그 스니펫을 읽지 않으므로 직접 설정한다.
-      # Apple Silicon 의 prefix 는 /opt/homebrew 고정. (Intel 이면 /usr/local)
-      $env.HOMEBREW_PREFIX = "/opt/homebrew"
-      $env.HOMEBREW_CELLAR = "/opt/homebrew/Cellar"
-      $env.HOMEBREW_REPOSITORY = "/opt/homebrew"
-
-      $env.PATH = (
-        $env.PATH
-        | (if ($in | describe) == "string" { split row (char esep) } else { $in })
-        | prepend [
-            "${config.home.profileDirectory}/bin" # home-manager 패키지 (starship 등)
-            "/run/current-system/sw/bin"           # nix-darwin 시스템 패키지 (darwin-rebuild 등)
-            "/nix/var/nix/profiles/default/bin"     # Determinate Nix (nix)
-            "/opt/homebrew/bin"                     # Homebrew 패키지 (nix 보다 뒤 우선순위)
-            "/opt/homebrew/sbin"
-            "${config.home.homeDirectory}/.local/bin"
-            (($env.XDG_CACHE_HOME? | default $env.HOME) | path join ".bun" "bin")
-        ]
-        | uniq
-      )
-    '' + lib.optionalString pkgs.stdenv.isLinux ''
-      $env.PATH = (
-        $env.PATH
-        | (if ($in | describe) == "string" { split row (char esep) } else { $in })
-        | prepend [
-            "${config.home.profileDirectory}/bin"
-            "${config.home.homeDirectory}/.local/bin"
-            (($env.XDG_CACHE_HOME? | default $env.HOME) | path join ".bun" "bin")
-        ]
-        | uniq
-      )
+    extraEnv = ''
+      source ${sessionEnv}
     '';
   };
 

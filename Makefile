@@ -4,16 +4,18 @@ FLAKE := path:.
 HOST  := $(shell hostname -s)
 UNAME := $(shell uname -s)
 
-.PHONY: switch switch-darwin switch-linux set-shell-linux setup-gpu-linux setup-toshy-linux build build-darwin build-linux check update
+.PHONY: switch switch-darwin switch-linux set-shell-linux setup-gpu-linux setup-toshy-linux build build-darwin build-linux check update check-shell-environment
 
 # 설정을 빌드하고 시스템에 적용한다.
 # - 먼저 nix build 로 스토어 경로를 확정한 뒤, 그 결과의 activate 스크립트를
 #   직접 실행한다. 현재 활성 darwin-rebuild 에 의존하지 않아 부트스트랩 포함
 #   모든 상황에서 안정적으로 동작한다.
 ifeq ($(UNAME),Darwin)
+HOME_CONFIG := $(FLAKE)\#darwinConfigurations.$(HOST).config.home-manager.users.chanhee
 switch: switch-darwin
 build: build-darwin
 else
+HOME_CONFIG := $(FLAKE)\#homeConfigurations.chanhee@fedora.config
 switch: switch-linux
 build: build-linux
 endif
@@ -67,6 +69,18 @@ check:
 	nix flake check $(FLAKE)
 	nix eval --raw '$(FLAKE)#homeConfigurations."chanhee@fedora".activationPackage.drvPath'
 	nix eval --raw '$(FLAKE)#darwinConfigurations.Chanhees-MacBook-Pro.system.drvPath'
+
+# 활성화하지 않은 후보 세대의 실제 env.nu와 Nushell로 환경 계약을 검증한다.
+check-shell-environment:
+	@set -eu; \
+	OUT="$$(nix build --no-link --print-out-paths $(HOME_CONFIG).home.activationPackage)"; \
+	HOME_DIR="$$(nix eval --raw $(HOME_CONFIG).home.homeDirectory)"; \
+	ENV_DIR="$$(nix eval --raw $(HOME_CONFIG).programs.nushell.configDir)"; \
+	ENV_DIR="$${ENV_DIR#"$$HOME_DIR"/}"; \
+	python3 scripts/check-shell-environment.py \
+		--nu "$$OUT/home-path/bin/nu" \
+		--env-file "$$OUT/home-files/$$ENV_DIR/env.nu" \
+		--home "$$HOME_DIR"
 
 # flake 입력을 최신으로 갱신한다 (flake.lock 업데이트).
 update:

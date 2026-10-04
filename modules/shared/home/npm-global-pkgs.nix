@@ -1,32 +1,30 @@
 { config, lib, pkgs, ... }:
 
 let
-  npmGlobalDir = "${config.home.homeDirectory}/.npm-global";
+  # npm 전역 설치 루트. package-managers.nix 의 programs.npm.settings.prefix 가
+  # 단일 소스이며, npmrc 생성(HM npm 모듈)·아래 activation·sessionPath 가
+  # 모두 같은 값을 쓴다.
+  npmPrefix = config.programs.npm.settings.prefix;
+
   # 전역으로 설치할 npm 패키지 목록.
-  # nixpkg node 는 store 가 읽기 전용이라 -g 설치가 실패하므로 여기서 관리한다.
+  # nixpkgs node 는 store 가 읽기 전용이라 -g 설치가 실패하므로 여기서 관리한다.
   npmGlobalPackages = [
     "defuddle"
   ];
 in
 {
-  # ~/.npm-global/bin 을 PATH 에 추가한다.
-  # shell.nix 의 extraEnv 이후에 합산(types.lines 연결)되므로 $env.PATH 는 이미 list.
-  programs.nushell.extraEnv = ''
-    $env.PATH = (
-      $env.PATH
-      | (if ($in | describe) == "string" { split row (char esep) } else { $in })
-      | prepend ["${npmGlobalDir}/bin"]
-      | uniq
-    )
-  '';
+  # npmrc와 activation이 사용하는 전역 prefix를 공통 세션 경로에도 등록한다.
+  home.sessionPath = [
+    "${npmPrefix}/bin"
+  ];
 
   # home-manager switch 시 누락된 패키지만 설치한다.
   # 바이너리 존재 여부로 설치 여부를 판단해 불필요한 네트워크 요청을 막는다.
   home.activation.installNpmGlobalPackages = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    run mkdir -p "${npmGlobalDir}"
+    run mkdir -p "${npmPrefix}"
     ${lib.concatMapStrings (pkg: ''
-      if [[ ! -e "${npmGlobalDir}/bin/${pkg}" ]]; then
-        run "${pkgs.nodejs}/bin/npm" install -g --prefix "${npmGlobalDir}" "${pkg}"
+      if [[ ! -e "${npmPrefix}/bin/${pkg}" ]]; then
+        run "${pkgs.nodejs}/bin/npm" install -g --prefix "${npmPrefix}" "${pkg}"
       fi
     '') npmGlobalPackages}
   '';

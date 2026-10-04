@@ -49,6 +49,64 @@ Mac을 추가할 때는 `hosts/`에 머신별 파일을 추가하고 `flake.nix`
 `darwinConfigurations` 출력을 연결한다. 기존 모듈을 재사용하고 UID·플랫폼 등
 실제 차이만 지정한다. 현재 패키지 구성은 두 OS 모두 ARM64를 대상으로 한다.
 
+## 셸 환경: Tern과 Ghostty
+
+환경의 원본은 Home Manager 선언이다. `~/.config/nushell/env.nu` 같은 배포 파일이나
+터미널별 PATH를 직접 수정하지 않는다.
+
+- 변수: 해당 기능 모듈의 `home.sessionVariables`.
+- 실행 경로: `home.sessionPath`. 그 외 검색 경로: `home.sessionSearchVariables`.
+- npm 전역 prefix: `modules/shared/home/package-managers.nix`의
+  `programs.npm.settings.prefix`. npmrc, 설치 activation, PATH가 같은 값을 사용한다.
+- Bun 기본 설치 루트: 같은 파일의 `bunRoot`. Fedora는 기존 `~/.cache/.bun`,
+  XDG를 사용하지 않는 Mac은 `~/.bun`을 유지한다. `BUN_INSTALL`을 명시하면 그 루트와
+  `bin` 경로를 사용한다. 터미널의 `XDG_CACHE_HOME`에 따라 설치 위치를 추정하거나
+  기존 패키지를 이동하지 않는다.
+
+`shell.nix`가 생성하는 `env.nu`는 `scripts/session-env.nu`의 공통 초기화를 사용한다.
+Bash 자식 프로세스에서 Home Manager의 `hm-session-vars.sh`와 기존 Nix 설치의
+`nix-daemon.sh`를 평가하므로 POSIX 변수 전개를 Nushell 문법으로 복제하지 않는다.
+선언된 변수와 필요한 Nix 환경만 가져오며, 부모의 초기화 완료 표시 때문에 건너뛰지 않는다.
+Java/Android 변수도 이 경로로 적용된다. Fedora의 Lix 자체는 교체하지 않는다.
+
+병합 규칙:
+
+- 상속된 비어 있지 않은 변수는 보존하고, 없는 값/빈 값만 선언값으로 채운다.
+- PATH는 **상속한 순서가 우선**이며 누락 경로만 뒤에 추가한다. 따라서 프로젝트의
+  `nix develop`/가상환경 경로를 앞에서 가리지 않는다. 상속한 시스템 경로의 도구도
+  추가된 사용자 경로보다 우선할 수 있다.
+- PATH 중복과 빈 항목은 제거한다. 다른 검색 변수는 중복을 제거하되
+  `MANPATH`의 빈 항목처럼 기본 검색 경로를 뜻하는 값은 보존한다.
+- `DISPLAY`, `WAYLAND_DISPLAY` 등 런타임 환경은 터미널에서 받은 값을 유지한다.
+
+Ghostty는 활성 Home Manager 프로필의 Nushell을 실행한다. Tern은 계정의 기본
+셸을 사용한다(Fedora 최초 설정의 `make set-shell-linux`). 터미널 종류별 환경 분기는 없다.
+대화형 셸과 로그인 셸에서 설정을 읽는다. 일반 `nu -c`는 `-i`를 붙여도 기본 설정을
+생략하므로, 설정이 필요한 명령 실행에는 `nu --login -c '…'`를 사용하거나 스크립트에서
+환경 파일을 명시적으로 `source`한다.
+
+### 검증·적용·롤백
+
+```sh
+make check                    # Fedora와 macOS 구성 평가
+make check-shell-environment  # 현재 OS 후보 세대의 env.nu 검증; 활성화하지 않음
+make switch                   # 검증 후 적용
+```
+
+환경 검사는 후보 세대의 Nushell을 최소 환경으로 실행한다. 로그인/비로그인 시작,
+명시적 source, 중첩 셸, 반복 초기화, 사용자 재정의, PATH 누락/빈 값,
+Bun의 실제 전역 bin 경로 및 Nix 평가를 확인한다. 사용자 config.nu는 읽지 않는다.
+Linux에서 macOS 구성 평가는 가능하지만 Mac 실행 검증을 대신하지는 않는다.
+
+적용 후 **새 탭/셸**에서 확인한다. 이미 실행 중인 셸·터미널 데몬·데스크톱 세션의
+환경은 소급 변경되지 않는다. Nushell은 새로 시작할 때 공통 초기화를 읽으므로 이를 위해
+Tern의 기존 작업 세션을 강제 종료할 필요는 없다. 데스크톱 세션 자체의 환경 변경은
+재로그인이 필요할 수 있다.
+
+Fedora에서 되돌리려면 `home-manager generations`로 이전 세대의 저장소 경로를 확인하고,
+그 경로의 `activate`를 실행한다. 이후 새 셸을 연다. Mac은 nix-darwin의 시스템 세대
+롤백 절차를 따른다. 소스 변경도 별도로 되돌려야 다음 `make switch`에서 재적용되지 않는다.
+
 ## Fedora 최초 적용
 
 최초 적용은 다음 세 명령으로 한다. GPU 설정과 로그인 셸 등록은 sudo 권한이

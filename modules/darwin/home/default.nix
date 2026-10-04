@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 let
   # 고정된 nixpkgs의 Temurin 26.0.1 대신 최신 안정판 보안 업데이트를 사용한다.
   jdk = pkgs.temurin-bin-26.overrideAttrs {
@@ -32,9 +32,4 @@ in
   };
   home.packages = [ androidSdk ];
   home.sessionVariables.ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
-
-  # Nushell은 Home Manager의 POSIX 세션 변수 스크립트를 읽지 않는다.
-  programs.nushell.environmentVariables = {
-    inherit (config.home.sessionVariables) JAVA_HOME ANDROID_HOME;
-  };
 }

@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 let
   androidSdk = (pkgs.androidenv.composeAndroidPackages {
     platformVersions = [ "34" ];
@@ -28,7 +28,4 @@ in
   };
   home.packages = [ pkgs.android-tools ]; # Fedora ARM64에서 실행할 adb
   home.sessionVariables.ANDROID_HOME = "${androidSdk}/libexec/android-sdk";
-  # Nushell은 Home Manager의 POSIX 세션 변수 스크립트를 읽지 않는다.
-  programs.nushell.environmentVariables.JAVA_HOME = config.home.sessionVariables.JAVA_HOME;
-  programs.nushell.environmentVariables.ANDROID_HOME = config.home.sessionVariables.ANDROID_HOME;
 }

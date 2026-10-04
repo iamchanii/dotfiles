@@ -14,8 +14,8 @@
       # Ghostty 는 기본적으로 $SHELL 환경변수를 따르는데, macOS GUI 로그인 세션의
       # $SHELL 은 로그인 시점 값(/bin/zsh)으로 캐시돼 dscl 로 셸을 바꿔도 재로그인
       # 전까지 갱신되지 않는다. 그래서 셸을 nushell 로 명시해 즉시·확실하게 고정한다.
-      # 안정 경로(/run/current-system/sw/bin)를 써서 store 해시 변화에 영향받지 않게 한다.
-      command = "${pkgs.nushell}/bin/nu";
+      # Home Manager 활성 프로파일을 사용해 세대 변경 후에도 현재 Nushell을 실행한다.
+      command = "${config.home.profileDirectory}/bin/nu";
       theme = "Catppuccin Mocha";
       # 영문: JetBrains Mono, 한글 폴백: GalmuriMono11
       # (두 폰트 모두 modules/darwin/system/fonts.nix 의 fonts.packages가 설치)
