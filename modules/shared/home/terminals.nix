@@ -17,14 +17,10 @@
       # Home Manager 활성 프로파일을 사용해 세대 변경 후에도 현재 Nushell을 실행한다.
       command = "${config.home.profileDirectory}/bin/nu";
       theme = "Catppuccin Mocha";
-      # 영문: JetBrains Mono, 한글 폴백: GalmuriMono11
-      # (두 폰트 모두 modules/darwin/system/fonts.nix 의 fonts.packages가 설치)
-      font-family = if pkgs.stdenv.isLinux then "Jetendard" else [
-        "JetBrains Mono"
-        "GalmuriMono11"
-      ];
+      # 두 플랫폼 모두 modules/shared/jetendard.nix 에서 만든 한영 고정폭 폰트를 쓴다.
+      font-family = "Jetendard";
       font-feature = [ "-calt" "-liga" "-dlig" ];
-      font-size = if pkgs.stdenv.isLinux then 12 else 14;
+      font-size = 12;
       # 기존 Mac 투명도는 유지하고 Fedora에서만 불투명 배경을 쓴다.
       background-opacity = lib.mkIf pkgs.stdenv.isDarwin 0.95;
       cursor-style = "block";

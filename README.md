@@ -131,7 +131,7 @@ Ghostty는 Fedora에서 `ghostty-org/ghostty`의 `main` 커밋을 `flake.lock`�
 - JDK 11 및 Nushell `JAVA_HOME` (Books App Android 빌드용)
 - Android SDK 34, Build Tools 30.0.3, ARM64 `adb` 및 `ANDROID_HOME` (SDK 라이선스 수락)
 - Nushell 로그인 셸과 Starship
-- Ghostty 개발판 (공식 `main` 소스 빌드, Jetendard 폰트, 불투명도 설정 없음)
+- Ghostty 개발판 (공식 `main` 소스 빌드, macOS와 공통인 Jetendard 12pt, 불투명도 설정 없음)
 - Neovim + NvChad
 - Zellij 터미널 멀티플렉서 0.45.1 (별도 nixpkgs 리비전 고정, catppuccin-mocha 테마, pane 셸 Nushell)
 - npm 전역 `defuddle`
@@ -202,6 +202,7 @@ nixpkgs의 `aarch64-linux` Chromium을 사용한다. Mac의 Homebrew Chrome 구�
 - **Ruby 4.0.6** — Mac 전용 `home.packages`, nixpkgs의 `mkRuby`로 최신 안정판 고정 (`modules/shared/home/cli.nix`)
 - **JDK 26.0.2.1** — Mac 전용 Eclipse Temurin ARM64 안정판. `programs.java`와 Nushell에 `JAVA_HOME` 설정 (`modules/darwin/home/default.nix`). Fedora의 Books App용 JDK 11은 유지
 - **Android SDK** — Mac 전용 Platform-Tools 37.0.0 (`adb`, `fastboot`), Command-line Tools 20.0 (`sdkmanager`, `avdmanager`), Build-Tools 37.0.0, Platform 37.0. `ANDROID_HOME`을 Nushell에도 설정. Emulator·시스템 이미지·NDK·CMake는 설치하지 않음
+- **Ghostty** — Mac은 nixpkgs의 `ghostty-bin`, Fedora는 공식 `main` 소스 빌드 사용. 두 환경 모두 공통 Jetendard 12pt 사용 (`modules/shared/jetendard.nix`, `modules/shared/home/terminals.nix`)
 - **Zellij 0.45.1** — 터미널 멀티플렉서 (`programs.zellij`). 0.45.1 을 담은 nixpkgs 리비전을 별도 입력(`nixpkgs-zellij`)으로 고정해 `make update` 에도 버전이 유지된다. catppuccin-mocha 테마, 내부 pane 도 nushell 사용. nushell 자동 시작 통합은 없어 직접 실행할 때만 뜸
 - **키보드 반복 속도 튜닝** — `KeyRepeat=2`, `InitialKeyRepeat=10`, 길게 누르기 시 액센트 메뉴 대신 반복 입력
 - **Homebrew cask** — brew 로 설치하는 cask 는 모두 `modules/darwin/system/homebrew.nix` 의 `casks` 에 선언한다 (`cleanup="zap"` 로 미선언 항목은 제거). brew 바이너리 자체는 nix 가 설치하지 않으므로 선행 설치돼 있어야 한다 (아래 설치 절차 참고). 현재 cask: `karabiner-elements`, `google-chrome`, `1password`, `obsidian`
