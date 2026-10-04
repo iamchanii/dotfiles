@@ -172,6 +172,9 @@ Wayland에서는 KWin의 가상 키보드 frontend를 사용하므로 `kwinrc`�
 사용하지 않고 Home Manager가 설치한 KWin Wayland launcher가 Nix Fcitx를 실행한다.
 Home Manager 모듈의 별도 user service는 자동 시작하지 않아 중복 실행을 막는다.
 
+별도 Fcitx 패키지 집합의 플랫폼은 폐기 예정인 `pkgs.system` 대신
+`pkgs.stdenv.hostPlatform.system`으로 지정한다.
+
 Toshy는 upstream 공식 Flake의 실험적 Home Manager 모듈로 Python/xwaykeyz
 런타임을 고정한다. udev 규칙, `uinput` 모듈 및 `input` 그룹은 NixOS 모듈 전용이라
 Fedora에서는 Toshy 설치기가 만든 시스템 설정을 유지한다. 새 머신에서는 해당

@@ -1,7 +1,7 @@
 { config, inputs, lib, pkgs, ... }:
 let
   fcitxPkgs = import inputs.nixpkgs-fcitx {
-    inherit (pkgs) system;
+    inherit (pkgs.stdenv.hostPlatform) system;
   };
   fcitxPackage = config.i18n.inputMethod.package;
 in
