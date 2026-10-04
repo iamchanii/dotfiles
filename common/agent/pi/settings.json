@@ -2,5 +2,12 @@
   "lastChangelogVersion": "1.0.0",
   "deviceId": "ade49330-02e9-466f-9968-2c4ff183b3f0",
   "defaultProvider": "openai",
-  "defaultModel": "gpt-5.5"
+  "defaultModel": "gpt-6-astra",
+  "packages": [
+    "npm:@pi-plugins/fast-mode",
+    "npm:pi-subagents",
+    "npm:@juicesharp/rpiv-ask-user-question",
+    "npm:@juicesharp/rpiv-todo"
+  ],
+  "hideThinkingBlock": true
 }
