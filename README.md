@@ -214,7 +214,7 @@ nixpkgs의 `aarch64-linux` Chromium을 사용한다. Mac의 Homebrew Chrome 구�
 - **Determinate Nix** — Nix 설치/업데이트 관리 (`determinateNix.enable`)
 - **NvChad** — Neovim IDE 구성 (nix4nvchad, `programs.nvchad.enable`)
 - **GitHub CLI** (`gh`) — `programs.gh.enable`
-- **Node.js** — `home.packages` (`pkgs.nodejs`)
+- **Node.js 26** — Mac/Fedora 공통 `home.packages`와 전역 npm 설치에 `pkgs.nodejs_26` 사용 (현재 잠금 버전: 26.3.0)
 - **pnpm 12.4.0** — Mac/Fedora 공통 `home.packages`, 플랫폼별 공식 ARM64 네이티브 바이너리 사용 (`modules/shared/home/cli.nix`)
 - **Ruby 4.0.6** — Mac 전용 `home.packages`, nixpkgs의 `mkRuby`로 최신 안정판 고정 (`modules/shared/home/cli.nix`)
 - **JDK 26.0.2.1** — Mac 전용 Eclipse Temurin ARM64 안정판. `programs.java`와 Nushell에 `JAVA_HOME` 설정 (`modules/darwin/home/default.nix`). Fedora의 Books App용 JDK 11은 유지

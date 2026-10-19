@@ -24,7 +24,7 @@ in
     run mkdir -p "${npmPrefix}"
     ${lib.concatMapStrings (pkg: ''
       if [[ ! -e "${npmPrefix}/bin/${pkg}" ]]; then
-        run "${pkgs.nodejs}/bin/npm" install -g --prefix "${npmPrefix}" "${pkg}"
+        run "${pkgs.nodejs_26}/bin/npm" install -g --prefix "${npmPrefix}" "${pkg}"
       fi
     '') npmGlobalPackages}
   '';

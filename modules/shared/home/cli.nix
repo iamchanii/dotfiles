@@ -48,7 +48,7 @@ in
   # 사용자 패키지
   home.packages =
     [
-      pkgs.nodejs # Node.js (현재 LTS)
+      pkgs.nodejs_26 # Node.js 26
       pnpm # pnpm 12.4.0
       pkgs.gh # 설정 파일은 GitHub CLI가 직접 관리
       inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
