@@ -1,0 +1,14 @@
+[alias]
+	# git merge 자체를 squash 기본값으로 바꾸는 config 는 없으므로 alias 로 제공
+	sm = "merge --squash"
+
+[credential "https://github.com"]
+	# mise shim 은 PATH 와 무관하게 동작하므로 GUI 앱의 git 에서도 쓸 수 있다.
+	helper = "!$HOME/.local/share/mise/shims/gh auth git-credential"
+
+[init]
+	defaultBranch = "main"
+
+[user]
+	email = "contact@imch.dev"
+	name = "Chanhee Lee"

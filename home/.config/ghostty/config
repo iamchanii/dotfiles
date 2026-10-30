@@ -1,0 +1,12 @@
+# GUI 로그인 세션의 $SHELL 은 재로그인 전까지 갱신되지 않으므로 셸을 명시한다.
+command = /opt/homebrew/bin/nu
+theme = Catppuccin Mocha
+font-family = Jetendard
+font-feature = -calt
+font-feature = -liga
+font-feature = -dlig
+font-size = 12
+background-opacity = 0.95
+cursor-style = block
+macos-option-as-alt = true
+window-save-state = always
