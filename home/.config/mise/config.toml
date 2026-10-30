@@ -81,10 +81,17 @@ for (const [source, names] of missing) {
 '''
 
 [dotfiles]
-# ~/.dotfiles 는 `mise bootstrap --from` 이 받은 이 저장소 checkout 이다.
-# ~/.config/mise 는 --config-dir 로 checkout 에 링크되므로 제외한다.
-"~" = { source = "~/.dotfiles/home", mode = "symlink-each", exclude = [".config/mise", ".config/nushell"] }
+# 원본은 `mise bootstrap --from` 이 받은 이 저장소 checkout(~/.dotfiles)이다.
+# ~/.config/mise 는 --config-dir 로 checkout 에 링크된다.
+"~/.config/git/config" = { source = "~/.dotfiles/home/.config/git/config" }
+"~/.config/ghostty/config" = { source = "~/.dotfiles/home/.config/ghostty/config" }
+"~/.config/pnpm/config.yaml" = { source = "~/.dotfiles/home/.config/pnpm/config.yaml" }
+"~/.config/nvim" = { source = "~/.dotfiles/home/.config/nvim" }
 # macOS 의 Nushell 은 이 경로를 config 디렉터리로 쓴다. mise.nu, history.txt 는 .gitignore 로 뺀다.
-"~/Library/Application Support/nushell" = { source = "~/.dotfiles/home/.config/nushell", mode = "symlink" }
-"~/.codex/AGENTS.md" = { source = "~/.dotfiles/home/.agents/AGENTS.md", mode = "symlink" }
-"~/.claude/CLAUDE.md" = { source = "~/.dotfiles/home/.agents/AGENTS.md", mode = "symlink" }
+"~/Library/Application Support/nushell" = { source = "~/.dotfiles/home/.config/nushell" }
+"~/.npmrc" = { source = "~/.dotfiles/home/.npmrc" }
+"~/.yarnrc.yml" = { source = "~/.dotfiles/home/.yarnrc.yml" }
+"~/.bunfig.toml" = { source = "~/.dotfiles/home/.bunfig.toml" }
+"~/.agents/AGENTS.md" = { source = "~/.dotfiles/home/.agents/AGENTS.md" }
+"~/.codex/AGENTS.md" = { source = "~/.dotfiles/home/.agents/AGENTS.md" }
+"~/.claude/CLAUDE.md" = { source = "~/.dotfiles/home/.agents/AGENTS.md" }

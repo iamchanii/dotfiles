@@ -26,9 +26,10 @@ home/                         $HOME 기준 설정 파일
 | 경로 | 방식 |
 | --- | --- |
 | `~/.config/mise` | `~/.dotfiles/home/.config/mise` 로의 디렉터리 링크 (`--config-dir`) |
-| `home/` 아래 나머지 파일 (`.config/nushell` 제외) | 파일마다 심링크 (`symlink-each`) |
+| `~/.config/nvim` | `~/.dotfiles/home/.config/nvim` 로의 디렉터리 링크 |
 | `~/Library/Application Support/nushell` | `~/.dotfiles/home/.config/nushell` 로의 디렉터리 링크 |
-| `~/.codex/AGENTS.md`, `~/.claude/CLAUDE.md` | `~/.dotfiles/home/.agents/AGENTS.md` 로의 심링크 |
+| `~/.config/git/config`, `~/.config/ghostty/config`, `~/.config/pnpm/config.yaml`, `~/.npmrc`, `~/.yarnrc.yml`, `~/.bunfig.toml` | `home/` 의 같은 경로로의 심링크 |
+| `~/.agents/AGENTS.md`, `~/.codex/AGENTS.md`, `~/.claude/CLAUDE.md` | `~/.dotfiles/home/.agents/AGENTS.md` 로의 심링크 |
 
 ## `config.toml` 이 하는 일
 
@@ -114,9 +115,10 @@ cd ~/.dotfiles && git pull
 mise bootstrap          # 패키지·도구·링크를 다시 맞춘다
 ```
 
-`home/` 에 새 파일을 추가하면 `mise dot apply` 가 링크를 만든다. 새 파일을 저장소에
-넣으려면 `home/` 의 같은 경로로 옮기고 커밋한 뒤 `mise dot apply` 를 실행한다. 비밀이나
-머신 전용 파일은 넣지 않는다(공개 저장소다).
+링크된 디렉터리(`nvim`, `nushell`) 안에 만든 파일은 바로 저장소에 생긴다. 다른 파일을
+새로 관리하려면 `home/` 의 같은 경로로 옮기고 `config.toml` 의 `[dotfiles]` 에 한 줄을
+추가한 뒤 `mise dot apply` 를 실행하고 커밋한다. 비밀이나 머신 전용 파일은 넣지 않는다
+(공개 저장소다).
 
 | 명령 | 설명 |
 | --- | --- |
@@ -147,6 +149,6 @@ user scope 스킬은 `npx skills add <source> -g` 로 설치한다. 본문은 `~
 ### Neovim
 
 `~/.config/nvim` 은 NvChad starter 를 시작점으로 한 구성이다. 처음 실행하면 lazy.nvim 이
-`~/.config/nvim/lazy-lock.json` 을 일반 파일로 만든다. 머신마다 같은 플러그인 버전을
-쓰려면 이 파일을 `home/.config/nvim/` 으로 옮겨 커밋하고 `mise dot apply` 를 실행한다.
+`lazy-lock.json` 을 만든다. 디렉터리가 링크되어 있으므로 이 파일은 저장소에 생기고, 커밋하면
+머신마다 같은 플러그인 버전을 쓴다.
 NvChad 본체는 `lua/plugins` 의 lazy 스펙으로 받으므로 upstream 갱신은 `:Lazy update` 로 한다.
