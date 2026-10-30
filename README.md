@@ -45,7 +45,7 @@ LaunchAgent 를 바꾼다.**
 
 | 부분 | 내용 |
 | --- | --- |
-| `[tools]` | node, pnpm, gh, starship, neovim, ripgrep (모두 latest), java `temurin-26.0.2+1`, android-sdk `20.0` |
+| `[tools]` | node, pnpm, gh, starship, neovim, ripgrep (모두 latest), java `temurin-26.0.2+101`, android-sdk `20.0` |
 | `[settings]` | `minimum_release_age = "1d"` |
 | `[bootstrap.packages]` | `brew:nushell`, `brew-cask:1password`, `mas:869223134`(KakaoTalk) |
 | `[bootstrap.macos.keyboard]` | key repeat 2, initial key repeat 15, 길게 눌러 악센트 입력 끄기 |
