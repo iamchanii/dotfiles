@@ -1,0 +1,3 @@
+home/.config/nushell/*
+!home/.config/nushell/env.nu
+!home/.config/nushell/config.nu
