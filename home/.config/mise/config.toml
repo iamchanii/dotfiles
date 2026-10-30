@@ -7,7 +7,7 @@ gh = "latest"
 starship = "latest"
 neovim = "latest"
 ripgrep = "latest" 
-java = "temurin-26.0.2+1"
+java = "temurin-26.0.2+101"
 android-sdk = "20.0"
 
 [settings]
