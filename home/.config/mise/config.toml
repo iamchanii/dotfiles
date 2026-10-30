@@ -1,0 +1,104 @@
+# MacBook Pro(macOS, Apple Silicon) 전역 mise 구성.
+
+[tools]
+node = "latest"
+pnpm = "latest"
+gh = "latest"
+starship = "latest"
+neovim = "latest"
+ripgrep = "latest" 
+java = "temurin-26.0.2+1"
+android-sdk = "20.0"
+
+[settings]
+minimum_release_age = "1d"
+
+[bootstrap.packages]
+"brew:nushell" = "latest"
+"brew-cask:1password" = "latest"
+"mas:869223134" = "latest" # KakaoTalk
+
+[bootstrap.macos.keyboard]
+key_repeat = 2 
+initial_key_repeat = 15 
+press_and_hold = false 
+
+[bootstrap.user]
+login_shell = "nu"
+
+[bootstrap.services.mise-history]
+builtin = "history-watch"
+
+[history]
+git_email = "mise@{hostname}"
+
+[bootstrap.hooks.post-tools]
+run = [
+  "mise run fonts:jetendard",
+  "mise run skills:restore",
+  "yes | mise exec -- sdkmanager --licenses >/dev/null",
+  "mise exec -- sdkmanager 'platform-tools' 'build-tools;37.0.0' 'platforms;android-37.0'",
+]
+
+[tasks."fonts:jetendard"]
+description = "Jetendard(JetBrains Mono Nerd Font + Pretendard)"
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+version=v0.1.0
+dir="$HOME/Library/Fonts"
+marker="$dir/.jetendard-$version"
+[ -e "$marker" ] && exit 0
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+curl -fsSL -o "$tmp/ttf.zip" "https://github.com/kuskhan/jetendard/releases/download/$version/Jetendard-TTF.zip"
+unzip -jo "$tmp/ttf.zip" '*.ttf' -d "$dir"
+touch "$marker"
+'''
+
+[tasks."skills:restore"]
+description = "~/.agents/.skill-lock.json 에 기록됐지만 설치되지 않은 user scope 스킬을 npx skills 로 설치"
+run = '''
+#!/usr/bin/env node
+const fs = require("node:fs");
+const path = require("node:path");
+const { spawnSync } = require("node:child_process");
+
+const root = path.join(process.env.HOME, ".agents");
+const lockPath = path.join(root, ".skill-lock.json");
+if (!fs.existsSync(lockPath)) process.exit(0);
+const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+
+// 같은 소스의 스킬은 한 번에 받는다.
+const missing = new Map();
+for (const [name, skill] of Object.entries(lock.skills ?? {})) {
+  if (fs.existsSync(path.join(root, "skills", name))) continue;
+  const source = skill.sourceUrl ?? skill.source;
+  missing.set(source, [...(missing.get(source) ?? []), name]);
+}
+
+const agents = lock.lastSelectedAgents ?? [];
+for (const [source, names] of missing) {
+  const args = ["skills", "add", source, "-g", "-y", "--skill", ...names];
+  if (agents.length) args.push("--agent", ...agents);
+  const { status } = spawnSync("npx", ["--yes", ...args], { stdio: "inherit" });
+  if (status !== 0) process.exit(status ?? 1);
+}
+'''
+
+[dotfiles]
+"~/.config/mise" = { mode = "track" }
+"~/.config/git/config" = { mode = "track" }
+"~/.config/nushell" = { mode = "track", include = ["env.nu", "config.nu"] }
+"~/Library/Application Support/nushell" = { source = "~/.config/nushell", mode = "symlink" }
+"~/.config/ghostty/config" = { mode = "track" }
+"~/.config/nvim" = { mode = "track" }
+"~/.npmrc" = { mode = "track" }
+"~/.config/pnpm/config.yaml" = { mode = "track" }
+"~/.yarnrc.yml" = { mode = "track" }
+"~/.bunfig.toml" = { mode = "track" }
+"~/.agents/AGENTS.md" = { mode = "track" }
+"~/.codex/AGENTS.md" = { source = "~/.agents/AGENTS.md", mode = "symlink" }
+"~/.claude/CLAUDE.md" = { source = "~/.agents/AGENTS.md", mode = "symlink" }
+"~/.agents/.skill-lock.json" = { mode = "track" }
+"~/.claude/skills" = { mode = "track", exclude = ["synced"] }
