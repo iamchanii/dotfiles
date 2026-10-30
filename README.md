@@ -37,9 +37,9 @@ home/                         $HOME 기준 설정 파일
 
 | 부분 | 내용 |
 | --- | --- |
-| `[tools]` | node, pnpm, gh, starship, neovim, ripgrep (모두 latest), java `temurin-26.0.2+101`, android-sdk `20.0` |
+| `[tools]` | node, pnpm, gh, starship, neovim, ripgrep (모두 latest), java `temurin-26.0.2+101`, android-sdk `20.0`, ruby `3`(서드파티 tap cask 평가용) |
 | `[settings]` | `minimum_release_age = "1d"` |
-| `[bootstrap.packages]` | `brew:nushell`, `brew-cask:1password`, `mas:869223134`(KakaoTalk) |
+| `[bootstrap.packages]` | `brew:nushell`, `brew-cask:1password`, `brew-cask:spacefarm-digital/tap/sunlight`(Sunlight), `mas:869223134`(KakaoTalk) |
 | `[bootstrap.macos.keyboard]` | key repeat 2, initial key repeat 15, 길게 눌러 악센트 입력 끄기 |
 | `[bootstrap.user]` | 로그인 셸을 `nu` 로 변경 |
 | `[bootstrap.hooks.post-tools]` | `fonts:jetendard`, `skills:restore`, Android SDK 라이선스 동의와 `platform-tools`·`build-tools;37.0.0`·`platforms;android-37.0` 설치 |

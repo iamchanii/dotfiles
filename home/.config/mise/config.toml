@@ -9,6 +9,7 @@ neovim = "latest"
 ripgrep = "latest" 
 java = "temurin-26.0.2+101"
 android-sdk = "20.0"
+ruby = "3"
 
 [settings]
 minimum_release_age = "1d"
@@ -16,6 +17,7 @@ minimum_release_age = "1d"
 [bootstrap.packages]
 "brew:nushell" = "latest"
 "brew-cask:1password" = "latest"
+"brew-cask:spacefarm-digital/tap/sunlight" = "latest"
 "mas:869223134" = "latest" # KakaoTalk
 
 [bootstrap.macos.keyboard]
