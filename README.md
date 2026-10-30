@@ -2,19 +2,25 @@
 
 MacBook Pro(macOS, Apple Silicon)의 사용자 환경을 [mise](https://mise.jdx.dev)로 관리한다.
 
-이 공개 저장소는 **최초 시드**다. 새 머신에 처음 놓을 설정 파일을 담고 있을 뿐,
-설치 이후의 원본은 아니다. 설치 후에는 설정 파일이 `$HOME` 의 제자리에 일반 파일로
-있고, mise history(`mode = "track"`)가 그 수정 내용을 체크포인트로 저장한다. 다른
-머신과의 동기화는 직접 만든 **비공개 history origin** 으로 한다.
+이 공개 저장소에는 서로 섞이지 않는 두 브랜치가 있다.
 
-| | 공개 시드 저장소 (이 저장소) | history origin (직접 만드는 비공개 저장소) |
+- `main`: **최초 시드**. 새 머신에 처음 놓을 설정 파일과 `install.sh`.
+- `mise-history`: 설치 이후의 원본인 mise history. 설정 파일은 `$HOME` 의 제자리에
+  일반 파일로 있고, mise history(`mode = "track"`)가 수정 내용을 체크포인트로 저장해 이
+  브랜치로 동기화한다.
+
+| | `main` (시드) | `mise-history` (history origin) |
 | --- | --- | --- |
 | 내용 | `home/` 아래 시드 파일 | mise history 체크포인트 (`.mise-history/` 메타데이터 포함) |
-| 쓰는 곳 | 새 머신 최초 설치: `install.sh` | 다른 머신 복원: `mise bootstrap --adopt <history origin>` |
-| 갱신 | 손으로 커밋 | 감시 서비스가 자동 저장, `mise dot sync` |
+| 쓰는 곳 | history 없이 처음 설치: `install.sh` | 다른 머신 복원: `mise bootstrap --adopt 'iamchanii/dotfiles?ref=mise-history'` |
+| 갱신 | 손으로 커밋 | 감시 서비스가 자동 저장하고 push |
 
-이 저장소를 `mise bootstrap --adopt iamchanii/dotfiles` 로 쓰면 안 된다. history
-메타데이터가 없는 저장소는 global config 저장소로 취급되어 저장소 전체가
+`mise-history` 는 공개 브랜치다. 추적 중인 디렉터리(`~/.config/mise`, `~/.config/nvim`,
+`~/.claude/skills`)에 새로 생긴 파일도 자동으로 올라가므로 비밀을 두지 않는다. 커밋
+작성자(`history.git_email = "mise@{hostname}"`)에 머신 hostname 이 드러난다.
+
+`ref` 없이 `mise bootstrap --adopt iamchanii/dotfiles` 로 쓰면 안 된다. `main` 에는 history
+메타데이터가 없어 global config 저장소로 취급되고, 저장소 전체가
 `~/.config/mise` 에 clone 되고, 설정은 `~/.config/mise/home/.config/mise/config.toml`
 에 묻혀 읽히지 않는다. 이때 출력은 `mise all tools are installed` 뿐이다.
 [복구 방법](#잘못된---adopt-에서-복구)
@@ -74,7 +80,8 @@ history 에 저장된다.
 
 ## 새 머신 최초 설치 (공개 저장소)
 
-history origin 이 없어도 된다.
+history origin 이 없어도 된다. 지금까지의 설정을 그대로 가져오려면 이 절차 대신
+[`mise-history` 로 복원](#mise-history-로-다른-머신-복원)한다.
 
 ### 선행 조건
 
@@ -179,24 +186,34 @@ cp -Rp ~/.dotfiles-backup/<YYYYmmdd-HHMMSS>/. ~/
 
 ## history origin 연결 (최초 설치 후 선택)
 
-origin 은 자동으로 만들거나 연결하지 않는다. 직접 **비공개** 저장소를 만든다. 이 공개
-저장소나 그 브랜치를 origin 으로 쓰지 않는다. 지금까지 저장된 모든 체크포인트가 올라간다.
+이미 `mise-history` 가 있으므로 보통은 아래 복원을 쓴다. 이 절차는 `install.sh` 로
+설치해 체크포인트가 쌓인 머신을 이 브랜치에 처음 연결할 때만 쓴다. 지금까지 저장된 모든
+체크포인트가 올라간다.
 
 ```sh
-mise dot origin set <비공개 저장소 URL> --sync sync
-mise dot sync
+mise dot origin set https://github.com/iamchanii/dotfiles.git --branch mise-history --sync sync
 ```
 
-연결 정보는 `~/.config/mise/config.local.toml` 에 기록된다. Git 인증(SSH 키나
-`gh auth login`)은 직접 준비한다.
+원격 브랜치가 이미 다른 내용(예: `main` 복사본)을 가지고 있으면 mise 가
+`local and origin histories are unrelated` 로 멈춘다. 그 브랜치에 지킬 history 가 없을 때만
+로컬 history 를 직접 올린 뒤 동기화한다(zsh 에서 실행).
 
-## 기존 history origin 으로 다른 머신 복원
+```sh
+git --git-dir="$HOME/.local/state/mise/history/repo.git" push --force https://github.com/iamchanii/dotfiles.git main:mise-history
+mise dot sync
+mise dot status
+```
 
-위에서 origin 을 연결한 적이 있을 때만 쓴다. 이 경우에는 `install.sh` 를 실행하지 않는다.
+연결 정보는 `~/.config/mise/config.local.toml` 에 기록되고, mise 가 machine-local 로
+보고 history 에서 제외한다. Git 인증(`gh auth login`)은 직접 준비한다.
+
+## `mise-history` 로 다른 머신 복원
+
+이 경우에는 `install.sh` 를 실행하지 않는다.
 
 ```sh
 curl https://mise.run | sh
-~/.local/bin/mise bootstrap --adopt <history origin URL>
+~/.local/bin/mise bootstrap --adopt 'iamchanii/dotfiles?ref=mise-history'
 ```
 
 mise 가 `.mise-history/format.toml` 로 history 저장소임을 알아보고 추적 파일을 제자리에
