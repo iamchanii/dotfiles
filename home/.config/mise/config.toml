@@ -26,12 +26,6 @@ press_and_hold = false
 [bootstrap.user]
 login_shell = "nu"
 
-[bootstrap.services.mise-history]
-builtin = "history-watch"
-
-[history]
-git_email = "mise@{hostname}"
-
 [bootstrap.hooks.post-tools]
 run = [
   "mise run fonts:jetendard",
@@ -87,18 +81,10 @@ for (const [source, names] of missing) {
 '''
 
 [dotfiles]
-"~/.config/mise" = { mode = "track" }
-"~/.config/git/config" = { mode = "track" }
-"~/.config/nushell" = { mode = "track", include = ["env.nu", "config.nu"] }
-"~/Library/Application Support/nushell" = { source = "~/.config/nushell", mode = "symlink" }
-"~/.config/ghostty/config" = { mode = "track" }
-"~/.config/nvim" = { mode = "track" }
-"~/.npmrc" = { mode = "track" }
-"~/.config/pnpm/config.yaml" = { mode = "track" }
-"~/.yarnrc.yml" = { mode = "track" }
-"~/.bunfig.toml" = { mode = "track" }
-"~/.agents/AGENTS.md" = { mode = "track" }
-"~/.codex/AGENTS.md" = { source = "~/.agents/AGENTS.md", mode = "symlink" }
-"~/.claude/CLAUDE.md" = { source = "~/.agents/AGENTS.md", mode = "symlink" }
-"~/.agents/.skill-lock.json" = { mode = "track" }
-"~/.claude/skills" = { mode = "track", exclude = ["synced"] }
+# ~/.dotfiles 는 `mise bootstrap --from` 이 받은 이 저장소 checkout 이다.
+# ~/.config/mise 는 --config-dir 로 checkout 에 링크되므로 제외한다.
+"~" = { source = "~/.dotfiles/home", mode = "symlink-each", exclude = [".config/mise", ".config/nushell"] }
+# macOS 의 Nushell 은 이 경로를 config 디렉터리로 쓴다. mise.nu, history.txt 는 .gitignore 로 뺀다.
+"~/Library/Application Support/nushell" = { source = "~/.dotfiles/home/.config/nushell", mode = "symlink" }
+"~/.codex/AGENTS.md" = { source = "~/.dotfiles/home/.agents/AGENTS.md", mode = "symlink" }
+"~/.claude/CLAUDE.md" = { source = "~/.dotfiles/home/.agents/AGENTS.md", mode = "symlink" }
