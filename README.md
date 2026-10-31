@@ -53,7 +53,7 @@ mise 파일이 둘인 것은 의도다. `config/mise/config.toml` 은 **전역**
 
 | 부분 | 위치 | 내용 |
 | --- | --- | --- |
-| `[tools]` | `config/mise/config.toml` | node, pnpm, gh, starship, neovim, ripgrep (모두 latest), java `temurin-26.0.2+101`, android-sdk `20.0`, claude `2.1.312`, ruby `3`(서드파티 tap cask 평가용) |
+| `[tools]` | `config/mise/config.toml` | node, pnpm, gh, starship, neovim, ripgrep (모두 latest), java `temurin-26.0.2+101`, android-sdk `20.0`, rust `stable`, claude `2.1.312`, ruby `3`(서드파티 tap cask 평가용) |
 | `[settings]` | `config/mise/config.toml` | `minimum_release_age = "1d"` |
 | `[bootstrap.packages]` | `mise.toml` | `brew:nushell`, `brew-cask:1password`, `brew-cask:spacefarm-digital/tap/sunlight`(Sunlight), `mas:869223134`(KakaoTalk) |
 | `[bootstrap.macos.keyboard]` | `mise.toml` | key repeat 2, initial key repeat 15, 길게 눌러 악센트 입력 끄기 |
