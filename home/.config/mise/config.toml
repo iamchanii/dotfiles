@@ -9,6 +9,7 @@ neovim = "latest"
 ripgrep = "latest" 
 java = "temurin-26.0.2+101"
 android-sdk = "20.0"
+claude = "2.1.312"
 ruby = "3"
 
 [settings]
