@@ -2,8 +2,14 @@
 	# git merge 자체를 squash 기본값으로 바꾸는 config 는 없으므로 alias 로 제공
 	sm = "merge --squash"
 
+# gh auth setup-git 과 같은 구성. 빈 helper 로 Xcode git 의 osxkeychain 같은 상속된 helper 를
+# 비우고 gh 의 토큰만 쓴다. mise shim 은 PATH 와 무관하게 동작하므로 GUI 앱의 git 에서도 쓸 수 있다.
 [credential "https://github.com"]
-	# mise shim 은 PATH 와 무관하게 동작하므로 GUI 앱의 git 에서도 쓸 수 있다.
+	helper =
+	helper = "!$HOME/.local/share/mise/shims/gh auth git-credential"
+
+[credential "https://gist.github.com"]
+	helper =
 	helper = "!$HOME/.local/share/mise/shims/gh auth git-credential"
 
 [init]
