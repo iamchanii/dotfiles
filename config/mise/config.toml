@@ -1,0 +1,19 @@
+# 전역 mise 구성: 어느 디렉터리에서나 쓰는 도구와 설정.
+#
+# 저장소 루트 mise.toml 의 [dotfiles] 가 이 파일을 ~/.config/mise/config.toml 로 링크한다.
+# `mise use -g` 도 링크를 따라 이 파일에 쓴다.
+
+[tools]
+node = "latest"
+pnpm = "latest"
+gh = "latest"
+starship = "latest"
+neovim = "latest"
+ripgrep = "latest"
+java = "temurin-26.0.2+101"
+android-sdk = "20.0"
+claude = "2.1.312"
+ruby = "3" # 서드파티 tap cask 평가용
+
+[settings]
+minimum_release_age = "1d"

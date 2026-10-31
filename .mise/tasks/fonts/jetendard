@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#MISE description="Jetendard(JetBrains Mono Nerd Font + Pretendard) TTF 를 ~/Library/Fonts 에 설치"
+set -euo pipefail
+
+version=v0.1.0
+dir="$HOME/Library/Fonts"
+marker="$dir/.jetendard-$version"
+[ -e "$marker" ] && exit 0
+
+tmp="$(mktemp -d)"
+trap 'rm -rf "$tmp"' EXIT
+curl -fsSL -o "$tmp/ttf.zip" "https://github.com/kuskhan/jetendard/releases/download/$version/Jetendard-TTF.zip"
+unzip -jo "$tmp/ttf.zip" '*.ttf' -d "$dir"
+touch "$marker"

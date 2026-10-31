@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+//MISE description="~/.agents/.skill-lock.json 에 기록됐지만 설치되지 않은 user scope 스킬을 npx skills 로 설치"
+const fs = require("node:fs");
+const path = require("node:path");
+const { spawnSync } = require("node:child_process");
+
+const root = path.join(process.env.HOME, ".agents");
+const lockPath = path.join(root, ".skill-lock.json");
+if (!fs.existsSync(lockPath)) process.exit(0);
+const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+
+// 같은 소스의 스킬은 한 번에 받는다.
+const missing = new Map();
+for (const [name, skill] of Object.entries(lock.skills ?? {})) {
+  if (fs.existsSync(path.join(root, "skills", name))) continue;
+  const source = skill.sourceUrl ?? skill.source;
+  missing.set(source, [...(missing.get(source) ?? []), name]);
+}
+
+const agents = lock.lastSelectedAgents ?? [];
+for (const [source, names] of missing) {
+  const args = ["skills", "add", source, "-g", "-y", "--skill", ...names];
+  if (agents.length) args.push("--agent", ...agents);
+  const { status } = spawnSync("npx", ["--yes", ...args], { stdio: "inherit" });
+  if (status !== 0) process.exit(status ?? 1);
+}

@@ -1,0 +1,51 @@
+# MacBook Pro(macOS, Apple Silicon) bootstrap 프로젝트.
+#
+#   mise bootstrap          # 이 디렉터리에서 실행한다
+#   mise dot apply          # [dotfiles] 만
+#   mise tasks              # task 목록
+#
+# 도구는 config/mise/config.toml(전역 구성)에, task 는 .mise/tasks/ 에 있다.
+# 상대 경로 source 는 이 파일이 있는 디렉터리 기준이므로 저장소를 어디에 clone 해도 된다.
+
+[vars]
+# 이 checkout 의 절대 경로. dotfile 템플릿에는 config_root 가 없어서 여기서 넘긴다.
+dotfiles_root = "{{ config_root }}"
+
+[bootstrap.packages]
+"brew:nushell" = "latest"
+"brew-cask:1password" = "latest"
+"brew-cask:spacefarm-digital/tap/sunlight" = "latest"
+"mas:869223134" = "latest" # KakaoTalk
+
+[bootstrap.macos.keyboard]
+key_repeat = 2
+initial_key_repeat = 15
+press_and_hold = false
+
+[bootstrap.user]
+login_shell = "nu"
+
+# bootstrap 마지막 단계에서 도구 설치 후 실행된다. 각 task 는 반복 실행에 안전하다.
+[tasks.bootstrap]
+description = "도구 설치 후 단계(폰트, 스킬, Android SDK)"
+depends = ["fonts:jetendard", "skills:restore", "android:sdk"]
+
+[dotfiles]
+"~/.config/mise/config.toml" = { source = "config/mise/config.toml" }
+# git config --global 은 심링크를 따라 저장소 파일에 쓰므로 링크하지 않는다. 로컬 파일에
+# include 블록만 넣고, 나머지(git config --global 이 쓰는 값)는 로컬 파일에 남긴다.
+"~/.config/git/config/dotfiles" = { block = '''
+[include]
+	path = {{ vars.dotfiles_root }}/config/git/config
+''', template = "tera" }
+"~/.config/ghostty/config" = { source = "config/ghostty/config" }
+"~/.config/pnpm/config.yaml" = { source = "config/pnpm/config.yaml" }
+"~/.config/nvim" = { source = "config/nvim" }
+# macOS 의 Nushell 은 이 경로를 config 디렉터리로 쓴다. mise.nu, history.txt 는 .gitignore 로 뺀다.
+"~/Library/Application Support/nushell" = { source = "config/nushell" }
+"~/.npmrc" = { source = "config/npm/npmrc" }
+"~/.yarnrc.yml" = { source = "config/yarn/yarnrc.yml" }
+"~/.bunfig.toml" = { source = "config/bun/bunfig.toml" }
+"~/.agents/AGENTS.md" = { source = "agents/AGENTS.md" }
+"~/.codex/AGENTS.md" = { source = "agents/AGENTS.md" }
+"~/.claude/CLAUDE.md" = { source = "agents/AGENTS.md" }
