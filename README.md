@@ -56,7 +56,7 @@ mise 파일이 둘인 것은 의도다. `config/mise/config.toml` 은 **전역**
 | `[tools]` | `config/mise/config.toml` | node, pnpm, gh, starship, neovim, ripgrep (모두 latest), java `temurin-21.0.13+9.0.LTS`, android-sdk `20.0`(sdkmanager 부트스트랩용), cargo-ndk·cocoapods·xcodegen (latest), rust `latest`, claude `2.1.312`, ruby `3`(서드파티 tap cask 평가, cocoapods 용) |
 | `[env]` | `config/mise/config.toml` | `ANDROID_HOME`·`ANDROID_SDK_ROOT` 를 Android Studio 와 같은 `~/Library/Android/sdk` 로 지정하고 그 `cmdline-tools/latest/bin`·`platform-tools`·`emulator` 를 PATH 앞에 둔다 |
 | `[settings]` | `config/mise/config.toml` | `minimum_release_age = "1d"` |
-| `[bootstrap.packages]` | `mise.toml` | `brew:nushell`, `brew-cask:1password`, `brew-cask:orbstack`, `brew-cask:spacefarm-digital/tap/sunlight`(Sunlight), `mas:869223134`(KakaoTalk) |
+| `[bootstrap.packages]` | `mise.toml` | `brew:nushell`, `brew:ffmpeg`(Android 에뮬레이터 화면 스트리밍), `brew-cask:1password`, `brew-cask:orbstack`, `brew-cask:spacefarm-digital/tap/sunlight`(Sunlight), `mas:869223134`(KakaoTalk) |
 | `[bootstrap.macos.keyboard]` | `mise.toml` | key repeat 2, initial key repeat 15, 길게 눌러 악센트 입력 끄기 |
 | `[bootstrap.user]` | `mise.toml` | 로그인 셸을 `nu` 로 변경 |
 | `[vars]` | `mise.toml` | `dotfiles_root`: checkout 의 절대 경로. git include 블록 템플릿에 쓴다 |

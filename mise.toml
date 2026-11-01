@@ -13,6 +13,7 @@ dotfiles_root = "{{ config_root }}"
 
 [bootstrap.packages]
 "brew:nushell" = "latest"
+"brew:ffmpeg" = "latest" # Android 에뮬레이터 화면 스트리밍(libx264)
 "brew-cask:1password" = "latest"
 "brew-cask:orbstack" = "latest"
 "brew-cask:spacefarm-digital/tap/sunlight" = "latest"
