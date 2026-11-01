@@ -14,6 +14,7 @@ dotfiles_root = "{{ config_root }}"
 [bootstrap.packages]
 "brew:nushell" = "latest"
 "brew-cask:1password" = "latest"
+"brew-cask:orbstack" = "latest"
 "brew-cask:spacefarm-digital/tap/sunlight" = "latest"
 "mas:869223134" = "latest" # KakaoTalk
 
