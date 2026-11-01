@@ -11,13 +11,23 @@ starship = "latest"
 neovim = "latest"
 ripgrep = "latest"
 rust = "latest"
-java = "temurin-26.0.2+101"
-android-sdk = "20.0"
+java = "temurin-21.0.13+9.0.LTS" # Android(AGP)·RN 빌드가 지원하는 LTS
+android-sdk = "20.0" # sdkmanager 부트스트랩용. 패키지는 아래 ANDROID_HOME 에 설치한다
 "cargo:cargo-ndk" = "latest"
 cocoapods = "latest"
 xcodegen = "latest"
 claude = "2.1.312"
 ruby = "3" # 서드파티 tap cask 평가, cocoapods(gem) 용
+
+# Android Studio 와 같은 표준 SDK 위치를 쓴다. android-sdk 도구가 내보내는 값을 덮어쓴다.
+[env]
+ANDROID_HOME = "{{ env.HOME }}/Library/Android/sdk"
+ANDROID_SDK_ROOT = "{{ env.HOME }}/Library/Android/sdk"
+_.path = [
+  "{{ env.HOME }}/Library/Android/sdk/cmdline-tools/latest/bin",
+  "{{ env.HOME }}/Library/Android/sdk/platform-tools",
+  "{{ env.HOME }}/Library/Android/sdk/emulator",
+]
 
 [settings]
 minimum_release_age = "1d"

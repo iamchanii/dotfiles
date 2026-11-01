@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-#MISE description="Android SDK 라이선스 동의와 platform-tools, build-tools, platform, NDK 설치"
+#MISE description="ANDROID_HOME 에 Android SDK 라이선스 동의와 cmdline-tools, platform-tools, emulator, build-tools, platform, NDK 설치"
 set -euo pipefail
 
 # yes 가 SIGPIPE 로 끝나므로 이 줄만 pipefail 을 끈다.
-(set +o pipefail; yes | sdkmanager --licenses >/dev/null)
-sdkmanager 'platform-tools' 'build-tools;37.0.0' 'platforms;android-37.0' 'ndk;30.0.16248370'
+(set +o pipefail; yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses >/dev/null)
+sdkmanager --sdk_root="$ANDROID_HOME" 'cmdline-tools;latest' 'platform-tools' 'emulator' \
+  'build-tools;37.0.0' 'platforms;android-37.0' 'ndk;30.0.16248370'
