@@ -10,11 +10,14 @@ gh = "latest"
 starship = "latest"
 neovim = "latest"
 ripgrep = "latest"
-rust = "stable"
+rust = "latest"
 java = "temurin-26.0.2+101"
 android-sdk = "20.0"
+"cargo:cargo-ndk" = "latest"
+cocoapods = "latest"
+xcodegen = "latest"
 claude = "2.1.312"
-ruby = "3" # 서드파티 tap cask 평가용
+ruby = "3" # 서드파티 tap cask 평가, cocoapods(gem) 용
 
 [settings]
 minimum_release_age = "1d"

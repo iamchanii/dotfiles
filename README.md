@@ -53,7 +53,7 @@ mise 파일이 둘인 것은 의도다. `config/mise/config.toml` 은 **전역**
 
 | 부분 | 위치 | 내용 |
 | --- | --- | --- |
-| `[tools]` | `config/mise/config.toml` | node, pnpm, gh, starship, neovim, ripgrep (모두 latest), java `temurin-26.0.2+101`, android-sdk `20.0`, rust `stable`, claude `2.1.312`, ruby `3`(서드파티 tap cask 평가용) |
+| `[tools]` | `config/mise/config.toml` | node, pnpm, gh, starship, neovim, ripgrep (모두 latest), java `temurin-26.0.2+101`, android-sdk `20.0`, cargo-ndk·cocoapods·xcodegen (latest), rust `latest`, claude `2.1.312`, ruby `3`(서드파티 tap cask 평가, cocoapods 용) |
 | `[settings]` | `config/mise/config.toml` | `minimum_release_age = "1d"` |
 | `[bootstrap.packages]` | `mise.toml` | `brew:nushell`, `brew-cask:1password`, `brew-cask:orbstack`, `brew-cask:spacefarm-digital/tap/sunlight`(Sunlight), `mas:869223134`(KakaoTalk) |
 | `[bootstrap.macos.keyboard]` | `mise.toml` | key repeat 2, initial key repeat 15, 길게 눌러 악센트 입력 끄기 |
@@ -61,7 +61,7 @@ mise 파일이 둘인 것은 의도다. `config/mise/config.toml` 은 **전역**
 | `[vars]` | `mise.toml` | `dotfiles_root`: checkout 의 절대 경로. git include 블록 템플릿에 쓴다 |
 | `[dotfiles]` | `mise.toml` | 위 배치 방식. source 는 `mise.toml` 기준 상대 경로 |
 | `[tasks.bootstrap]` | `mise.toml` | bootstrap 마지막 단계에서 `fonts:jetendard`, `skills:restore`, `android:sdk` 실행 |
-| task | `.mise/tasks/` | `fonts:jetendard`(Jetendard TTF 를 `~/Library/Fonts` 에), `skills:restore`, `android:sdk`(라이선스 동의, `platform-tools`·`build-tools;37.0.0`·`platforms;android-37.0`) |
+| task | `.mise/tasks/` | `fonts:jetendard`(Jetendard TTF 를 `~/Library/Fonts` 에), `skills:restore`, `android:sdk`(라이선스 동의, `platform-tools`·`build-tools;37.0.0`·`platforms;android-37.0`·`ndk;30.0.16248370`) |
 
 ## 새 머신 설치
 
